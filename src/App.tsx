@@ -13,6 +13,7 @@ import {
   CircleDollarSign,
   Building2,
   Croissant,
+  Dumbbell,
   Dog,
   Snowflake,
   Fingerprint,
@@ -68,13 +69,13 @@ const partnerCategories: PartnerCategory[] = [
   { id: 'posto-combustivel', label: 'Posto de combustível', icon: Fuel, color: 'text-secondary', active: true },
   { id: 'sorveteria', label: 'Sorveteria', icon: Snowflake, color: 'text-sky-300', active: true },
   { id: 'motorista', label: 'Motoristas', icon: Car, color: 'text-sky-300', active: true },
-  { id: 'frete', label: 'Frete', icon: Car, color: 'text-emerald-300', active: true },
   { id: 'gas', label: 'Gás', icon: Flame, color: 'text-yellow-300', active: true },
   { id: 'salao-beleza-cs', label: 'Salão de beleza', icon: Sparkles, color: 'text-pink-300', active: true },
+  { id: 'academia', label: 'Academia', icon: Dumbbell, color: 'text-orange-300', active: true },
   { id: 'construtora', label: 'Construtora', icon: Building2, color: 'text-stone-300', active: true },
   { id: 'barbearia', label: 'Barbearia', icon: Scissors, color: 'text-violet-300', active: true },
   { id: 'cfc', label: 'CFC (Centro de Formação de Condutores)', icon: GraduationCap, color: 'text-amber-300', active: true },
-  { id: 'mercado', label: 'Mercado', icon: ShoppingBasket, color: 'text-lime-300', active: true, highlighted: true },
+  { id: 'mercado', label: 'Mercado', icon: ShoppingBasket, color: 'text-lime-300', active: true },
   { id: 'odontologia', label: 'Consultório Odontológico', icon: Stethoscope, color: 'text-cyan-300', active: true },
   { id: 'hortifruti', label: 'Hortifruti', icon: ShoppingBasket, color: 'text-emerald-300', active: true },
   { id: 'produtos-naturais', label: 'Produtos naturais', icon: Leaf, color: 'text-emerald-300', active: true },
@@ -97,7 +98,6 @@ const categoryAliases: Record<string, string[]> = {
   'posto-combustivel': ['posto', 'posto de combustivel', 'combustivel', 'auto posto', 'posto br'],
   sorveteria: ['sorveteria', 'sorvete'],
   motorista: ['motorista', 'moto taxi', 'mototaxi'],
-  frete: ['frete', 'mudanca', 'mudanças'],
   mercado: ['mercado'],
   hortifruti: ['hortifruti', 'horti fruti', 'horti', 'fruti'],
   'produtos-naturais': ['produtos naturais', 'emporio canto verde', 'empório canto verde', 'canto verde', 'natural'],
@@ -113,6 +113,7 @@ const categoryAliases: Record<string, string[]> = {
   'oficina-mecanica': ['oficina mecanica', 'oficina mecânica', 'mecanica'],
   padaria: ['padaria'],
   'salao-beleza-cs': ['salao de beleza', 'salao beleza', 'beleza'],
+  academia: ['academia', 'roosters', 'atletica'],
   cfc: ['cfc', 'condutores', 'autoescola', 'auto escola'],
 }
 
@@ -129,18 +130,21 @@ type PublicPartner = {
   mapQuery?: string
   discount?: string
   note?: string
+  // ponytail: encarte semanal como imagem — o mercado já entrega a arte pronta toda semana.
+  // Trocar 1 arquivo > redigitar 20+ preços (e errar preço é erro caro).
+  flyer?: string
 }
 
 const fallbackPartners: PublicPartner[] = [
   { id: 'fp-1', name: 'Manicure', category: 'Manicure', phone: '19 99986 6909', address: '', city: 'Cidade Universitária', region: 'UNASP', status: 'ATIVO', showOnMap: false, discount: '10%' },
   { id: 'fp-2', name: 'Eletricista', category: 'Eletricista', phone: '11 95202 6914', address: '', city: 'Engenheiro Coelho', region: 'UNASP', status: 'ATIVO', showOnMap: false, discount: '5 a 10%' },
   { id: 'fp-4', name: 'Ar condicionado', category: 'Manutenção de ar-condicionado', phone: '11 95202 6914', address: '', city: 'Engenheiro Coelho', region: 'UNASP', status: 'ATIVO', showOnMap: false, discount: '5 a 10%' },
-  { id: 'fp-5', name: 'Panatós restaurante', category: 'Restaurante', phone: '', address: 'Rua Lery de Souza Duarte, 266', city: 'Cidade Universitária', region: 'UNASP', status: 'ATIVO', showOnMap: true, discount: '7%' },
+  { id: 'fp-5', name: 'Panatós restaurante', category: 'Restaurante', phone: '', address: 'Rua Um, Engenheiro Coelho - SP, 13165-000', city: 'Engenheiro Coelho', region: 'UNASP', status: 'ATIVO', showOnMap: true, mapQuery: 'Rua Um, Engenheiro Coelho - SP, 13165-000', discount: '7%' },
   { id: 'fp-6', name: 'Nova Ótica Vitaliz', category: 'Ótica', phone: '19 99782 6744', address: 'Rua 7 de Setembro, 381, Centro', city: 'Engenheiro Coelho', region: 'UNASP', status: 'ATIVO', showOnMap: true, discount: 'na loja' },
   { id: 'fp-7', name: 'Lava rápido Nick', category: 'Lavacar', phone: '19 99844 0616', address: 'Rua1 N: 76 bairro Recanto Portinari (Conhecido como rua João Cardoso Filho N:76)', city: 'Artur Nogueira', region: 'UNASP', status: 'ATIVO', showOnMap: true, mapQuery: 'Rua João Cardoso Filho, 76, Artur Nogueira', discount: '5%' },
   { id: 'fp-8', name: 'Unigas tele entrega', category: 'Gás', phone: '19 99171 8015', address: 'Rua Hosana Cristina de Souza, 267, Bairro Universitário', city: 'Engenheiro Coelho', region: 'UNASP', status: 'ATIVO', showOnMap: true, discount: '5%' },
   { id: 'fp-9', name: 'Massas delivery', category: 'Tele entrega massas', phone: '19 97161 4336', address: '', city: 'Engenheiro Coelho', region: 'UNASP', status: 'ATIVO', showOnMap: false, discount: '8%' },
-  { id: 'fp-10', name: 'Supermercado Guidotti', category: 'Mercado', phone: '', address: 'Rua Celina Cavalheiro Francischetti, 319, Jardim Luiz Favero', city: 'Engenheiro Coelho', region: 'UNASP', status: 'ATIVO', showOnMap: true, discount: 'na loja', note: 'Em implantação' },
+  { id: 'fp-10', name: 'Supermercado Guidotti', category: 'Mercado', phone: '', address: 'Rua Celina Cavalheiro Francischetti, 319, Jardim Luiz Favero', city: 'Engenheiro Coelho', region: 'UNASP', status: 'ATIVO', showOnMap: true, note: 'Observação: você já está cadastrado e os descontos são automáticos no caixa do mercado, não havendo necessidade de identificação.', flyer: '/IMG/encarte-guidotti.jpg' },
   { id: 'fp-10b', name: 'Hortifruti', category: 'Hortifruti', phone: '19 99954 5292', address: '', city: 'Engenheiro Coelho', region: 'UNASP', status: 'ATIVO', showOnMap: false, discount: '5%' },
   { id: 'fp-11', name: 'Odontologia', category: 'Consultório Odontológico', phone: '11 97530 2618', address: 'Rua Minas Gerais, 254, Jardim Amalia', city: 'Engenheiro Coelho', region: 'UNASP', status: 'ATIVO', showOnMap: true, discount: '10% à vista e 5% no crédito' },
   { id: 'fp-12', name: 'Auto escola Lopes', category: 'CFC', phone: '19 98841 6068', address: 'Rua Antônio Batistela, 130, Jardim Brasil', city: 'Engenheiro Coelho', region: 'UNASP', status: 'ATIVO', showOnMap: true, discount: '5%' },
@@ -150,12 +154,13 @@ const fallbackPartners: PublicPartner[] = [
   { id: 'fp-16', name: 'Moto táxi', category: 'Motorista', phone: '19 99968 0621', address: '', city: 'Engenheiro Coelho', region: 'UNASP', status: 'ATIVO', showOnMap: false, discount: '5%' },
   { id: 'fp-17', name: 'Motorista carro', category: 'Motorista', phone: '11 98224 5890', address: '', city: 'Engenheiro Coelho', region: 'UNASP', status: 'ATIVO', showOnMap: false, discount: '5%' },
   { id: 'fp-18', name: 'Sorveteria', category: 'Sorveteria', phone: '', address: 'Rua 7 de Setembro, 515', city: 'Engenheiro Coelho', region: 'UNASP', status: 'ATIVO', showOnMap: true },
-  { id: 'fp-19', name: 'Frete', category: 'Frete', phone: '19 99277 1862', address: '', city: 'Engenheiro Coelho', region: 'UNASP', status: 'ATIVO', showOnMap: false, discount: '10%' },
   { id: 'fp-20', name: 'Motorista de auto escola', category: 'Motorista', phone: '19 99862 6766', address: '', city: 'Engenheiro Coelho', region: 'UNASP', status: 'ATIVO', showOnMap: false, discount: '12%' },
   { id: 'fp-produtos-naturais', name: 'Produtos naturais', category: 'Produtos naturais', phone: '19 99120 8014', address: 'Rua Maria Simões de Andrade, 1768, esquina Rua Rui Barbosa, entrada principal cidade, Jardim Amaro', city: 'Artur Nogueira', region: 'UNASP', status: 'ATIVO', showOnMap: true, discount: '15%' },
   { id: 'fp-espetinho-rotula', name: 'Espetinho da rótula', category: 'Espetinho', phone: '19 99608 9626', address: '', city: 'Engenheiro Coelho', region: 'UNASP', status: 'ATIVO', showOnMap: false, discount: 'no local' },
   { id: 'fp-pinheiros-construtora', name: "Pinheiro's Construtora", category: 'Construtora', phone: '19 99834 3441', address: '', city: 'Engenheiro Coelho', region: 'UNASP', status: 'ATIVO', showOnMap: false, discount: '10% em projetos e 2,5% em construção/execução' },
-  { id: 'fp-thows-barbearia', name: "Thow's Barbearia", category: 'Barbearia', phone: '15 99653 4206', address: '', city: 'Engenheiro Coelho', region: 'UNASP', status: 'ATIVO', showOnMap: false, discount: '5%' },
+  { id: 'fp-jhows-barbearia', name: "Jhow's Barbearia", category: 'Barbearia', phone: '15 99653 4206', address: '', city: 'Engenheiro Coelho', region: 'UNASP', status: 'ATIVO', showOnMap: false, discount: '5%' },
+  { id: 'fp-roosters-academy', name: 'Roosters Academy', category: 'Academia', phone: '19 3858 9639', address: '', city: 'Engenheiro Coelho', region: 'UNASP', status: 'ATIVO', showOnMap: false, discount: '15%' },
+  { id: 'fp-salao-unasp', name: 'Salão de beleza do UNASP', category: 'Salão de beleza', phone: '15 99612 8875', address: '', city: 'Engenheiro Coelho', region: 'UNASP', status: 'ATIVO', showOnMap: false, discount: '5%' },
 ]
 
 const offers = [
@@ -275,6 +280,7 @@ const mergePartnersWithFallback = (incomingPartners: PublicPartner[]) => {
       mapQuery: fallback.mapQuery || partner.mapQuery,
       discount: fallback.discount || partner.discount,
       note: fallback.note || partner.note,
+      flyer: fallback.flyer || partner.flyer,
     }
   })
 
@@ -905,6 +911,7 @@ function SimulatorSection() {
 function PartnerSection() {
   const mobileCarouselRef = useRef<HTMLDivElement>(null)
   const mapContainerRef = useRef<HTMLDivElement>(null)
+  const flyerDialogRef = useRef<HTMLDialogElement>(null)
   const [activeRegion, setActiveRegion] = useState(partnerRegions[0])
   const [activeCategory, setActiveCategory] = useState(partnerCategories[0])
   const [livePartners, setLivePartners] = useState<PublicPartner[]>([])
@@ -1201,6 +1208,48 @@ function PartnerSection() {
           </>
         ) : null}
 
+        {primaryPartner?.flyer ? (
+          <>
+            <Reveal from="up" className="mt-12 overflow-hidden rounded-3xl border border-white/10 bg-surface-container-low shadow-2xl">
+              <button type="button" onClick={() => flyerDialogRef.current?.showModal()} className="block w-full">
+                <img
+                  src={primaryPartner.flyer}
+                  alt={`Encarte de ofertas do ${primaryPartner.name}`}
+                  className="w-full"
+                />
+              </button>
+              <p className="px-4 py-3 text-center text-xs text-outline">
+                Toque para ampliar · Preços atualizados semanalmente
+              </p>
+            </Reveal>
+
+            {/* <dialog> nativo: Esc para fechar e focus trap sem código extra */}
+            <dialog
+              ref={flyerDialogRef}
+              onClick={(event) => {
+                if (event.target === flyerDialogRef.current) flyerDialogRef.current.close()
+              }}
+              className="relative max-w-none bg-transparent p-0 backdrop:bg-black/85"
+            >
+              <button
+                type="button"
+                onClick={() => flyerDialogRef.current?.close()}
+                aria-label="Fechar encarte"
+                className="absolute right-3 top-3 z-10 flex h-11 w-11 items-center justify-center rounded-full bg-black/75 text-white ring-1 ring-white/25 transition hover:bg-black"
+              >
+                <X className="h-5 w-5" />
+              </button>
+              <div className="max-h-[92vh] max-w-[96vw] overflow-auto rounded-2xl">
+                <img
+                  src={primaryPartner.flyer}
+                  alt={`Encarte de ofertas do ${primaryPartner.name}`}
+                  className="block max-w-none"
+                />
+              </div>
+            </dialog>
+          </>
+        ) : null}
+
         {visibleCategories.length && visibleRegions.length && canShowPrimaryMap ? (
           <Reveal
             from="up"
@@ -1272,12 +1321,12 @@ function PartnerSection() {
                             {discountText}
                           </span>
                         ) : null}
-                        {partner.note ? (
-                          <span className="rounded-full bg-yellow-400/15 px-2 py-1 text-xs font-semibold text-yellow-300">
-                            {partner.note}
-                          </span>
-                        ) : null}
                       </div>
+                      {partner.note ? (
+                        <p className="mt-2 rounded-lg border border-yellow-400/25 bg-yellow-400/10 px-3 py-2 text-xs leading-relaxed text-yellow-200">
+                          {partner.note}
+                        </p>
+                      ) : null}
                       <div className="mt-3 space-y-2 text-xs">
                         <a
                           href={mapsLink}
