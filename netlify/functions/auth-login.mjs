@@ -1,4 +1,5 @@
 import { query } from './_db.mjs'
+import { hashPassword, verifyPassword } from './_auth.mjs'
 
 const json = (statusCode, body) => ({
   statusCode,
@@ -26,14 +27,16 @@ export async function handler(event) {
       return json(400, { error: 'Informe CPF e senha válidos.' })
     }
 
+    // Busca pelo CPF e confere a senha em código: no banco ela está hasheada
+    // (scrypt), então não dá mais pra comparar dentro do SQL.
     const result = await query(
       `
-      SELECT id, full_name, cpf, email, phone, city, status
+      SELECT id, full_name, cpf, email, phone, city, status, password
       FROM registrations
-      WHERE cpf = $1 AND password = $2
+      WHERE cpf = $1
       LIMIT 1;
       `,
-      [cpf, password],
+      [cpf],
     )
 
     if (!result.rowCount) {
@@ -41,6 +44,15 @@ export async function handler(event) {
     }
 
     const user = result.rows[0]
+    const { ok, needsRehash } = verifyPassword(password, user.password)
+    if (!ok) {
+      return json(401, { error: 'CPF ou senha inválidos.' })
+    }
+
+    // Migração transparente do legado em texto puro.
+    if (needsRehash) {
+      await query(`UPDATE registrations SET password = $1 WHERE id = $2;`, [hashPassword(password), user.id])
+    }
     return json(200, {
       ok: true,
       user: {

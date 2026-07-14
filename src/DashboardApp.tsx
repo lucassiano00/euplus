@@ -22,7 +22,7 @@ import {
 } from './dashboardData'
 
 type Session =
-  | { role: 'admin'; adminId: string; adminName: string; adminEmail: string }
+  | { role: 'admin'; adminId: string; adminName: string; adminEmail: string; token: string }
   | null
 
 type GrowthWindow = 1 | 5 | 12
@@ -381,8 +381,27 @@ function DashboardApp() {
     dependents: [] as DependentRecord[],
   })
 
-  const loadDashboardData = async () => {
-    const response = await fetch(`${functionsBase}/dashboard`)
+  // Único ponto de saída pro /dashboard: sempre manda o token e trata 401 num lugar só.
+  // O token pode vir explícito porque no login o `session` ainda não foi setado.
+  const dashboardFetch = async (init: RequestInit = {}, explicitToken?: string) => {
+    const token = explicitToken ?? (session?.role === 'admin' ? session.token : '')
+    const response = await fetch(`${functionsBase}/dashboard`, {
+      ...init,
+      headers: {
+        ...(init.headers ?? {}),
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      },
+    })
+    if (response.status === 401) {
+      setSession(null)
+      navigate('/login-admin')
+      throw new Error('Sessão expirada. Faça login novamente.')
+    }
+    return response
+  }
+
+  const loadDashboardData = async (explicitToken?: string) => {
+    const response = await dashboardFetch({}, explicitToken)
     const data = await readApiBody(response, 'A função de dashboard não foi encontrada no deploy.')
     if (!response.ok || !data.ok) throw new Error(data.error || 'Falha ao carregar dados do dashboard.')
     setStudents(data.students || [])
@@ -567,12 +586,14 @@ function DashboardApp() {
         return
       }
 
-      await loadDashboardData()
+      // O token tem que ir explícito aqui: o setSession abaixo ainda não refletiu.
+      await loadDashboardData(data.token)
       setSession({
         role: 'admin',
         adminId: `adm-${data.admin.id}`,
         adminName: data.admin.name,
         adminEmail: data.admin.email,
+        token: data.token,
       })
       setAuthError('')
       navigate('/admin/dashboard')
@@ -606,14 +627,13 @@ function DashboardApp() {
 
   const updateStudentStatus = async (studentId: string, status: StudentStatus) => {
     try {
-      const response = await fetch(`${functionsBase}/dashboard`, {
+      const response = await dashboardFetch({
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           action: 'updateStudentStatus',
           id: studentId,
           status,
-          actor: currentAdmin?.name ?? 'Admin Euplus',
         }),
       })
       const data = await readApiBody(response, 'Falha ao atualizar status de aluno.')
@@ -627,14 +647,13 @@ function DashboardApp() {
 
   const updateUserStatus = async (userId: string, status: UserAccountStatus) => {
     try {
-      const response = await fetch(`${functionsBase}/dashboard`, {
+      const response = await dashboardFetch({
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           action: 'updateVidaStatus',
           id: userId,
           status,
-          actor: currentAdmin?.name ?? 'Admin Euplus',
         }),
       })
       const data = await readApiBody(response, 'Falha ao atualizar status de usuário.')
@@ -715,7 +734,7 @@ function DashboardApp() {
       }))
 
     try {
-      const response = await fetch(`${functionsBase}/dashboard`, {
+      const response = await dashboardFetch({
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -729,7 +748,6 @@ function DashboardApp() {
           studentCode: newUserDraft.studentCode.trim(),
           status: newUserDraft.status,
           dependents: cleanDependents,
-          actor: currentAdmin?.name ?? 'Admin Euplus',
         }),
       })
       const data = await readApiBody(response, 'Falha ao salvar usuário Vida.')
@@ -1346,10 +1364,10 @@ function DashboardApp() {
         editing={editing}
         onBack={() => navigate('/admin/parceiros')}
         onSave={(record) => {
-          fetch(`${functionsBase}/dashboard`, {
+          dashboardFetch({
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ action: 'savePartner', partner: record, actor: currentAdmin?.name ?? 'Admin Euplus' }),
+            body: JSON.stringify({ action: 'savePartner', partner: record }),
           })
             .then((response) => readApiBody(response, 'Falha ao salvar parceiro.'))
             .then((data) => {
@@ -1429,10 +1447,10 @@ function DashboardApp() {
         editing={editing}
         onBack={() => navigate('/admin/ofertas')}
         onSave={(record) => {
-          fetch(`${functionsBase}/dashboard`, {
+          dashboardFetch({
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ action: 'saveOffer', offer: record, actor: currentAdmin?.name ?? 'Admin Euplus' }),
+            body: JSON.stringify({ action: 'saveOffer', offer: record }),
           })
             .then((response) => readApiBody(response, 'Falha ao salvar oferta.'))
             .then((data) => {

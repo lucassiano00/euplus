@@ -1,4 +1,5 @@
 import pg from 'pg'
+import { hashPassword } from './_auth.mjs'
 
 const { Pool } = pg
 
@@ -200,7 +201,7 @@ export async function query(text, params = []) {
           password = EXCLUDED.password,
           role = EXCLUDED.role;
         `,
-        ['Admin Euplus', adminEmail, adminPassword, 'owner'],
+        ['Admin Euplus', adminEmail, hashPassword(adminPassword), 'owner'],
       )
     }
 

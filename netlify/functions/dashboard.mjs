@@ -1,4 +1,5 @@
 import { query } from './_db.mjs'
+import { issueAdminToken, verifyAdmin, hashPassword, verifyPassword } from './_auth.mjs'
 
 const MAX_DEPENDENTS = 3
 
@@ -6,12 +7,16 @@ const json = (statusCode, body) => ({
   statusCode,
   headers: {
     'Content-Type': 'application/json',
+    // O token vai no header Authorization (não em cookie), então não há credencial
+    // ambiente e Origin:* deixa de ser vetor — mas o preflight precisa liberar o header.
     'Access-Control-Allow-Origin': '*',
-    'Access-Control-Allow-Headers': 'Content-Type',
+    'Access-Control-Allow-Headers': 'Content-Type, Authorization',
     'Access-Control-Allow-Methods': 'GET,POST,OPTIONS',
   },
   body: JSON.stringify(body),
 })
+
+const unauthorized = () => json(401, { error: 'Não autorizado.' })
 
 const onlyDigits = (value = '') => value.replace(/\D/g, '')
 
@@ -69,8 +74,35 @@ const mapLog = (row) => ({
   createdAt: row.created_at ? String(row.created_at).slice(0, 16).replace('T', ' ') : '',
 })
 
-async function getDashboardData() {
-  const [studentsRes, vidaRes, dependentsRes, partnersRes, offersRes, logsRes] = await Promise.all([
+// Só o que o site público precisa. Sem CPF, sem e-mail, sem telefone de usuário.
+async function getPublicData() {
+  const [partnersRes, offersRes] = await Promise.all([
+    query(
+      `
+      SELECT id, name, cnpj, category, phone, address, city, region, lat, lng, status, show_on_map, show_on_offers, logo, created_at
+      FROM partners
+      ORDER BY created_at DESC;
+      `,
+    ),
+    query(
+      `
+      SELECT id, partner_id, title, description, discount, valid_until, status, image
+      FROM offers
+      ORDER BY created_at DESC;
+      `,
+    ),
+  ])
+
+  return {
+    partners: partnersRes.rows.map(mapPartner),
+    offers: offersRes.rows.map(mapOffer),
+  }
+}
+
+// Dados sensíveis — só sai com token de admin válido.
+async function getAdminData() {
+  const [publicData, studentsRes, vidaRes, dependentsRes, logsRes] = await Promise.all([
+    getPublicData(),
     query(
       `
       SELECT id, full_name, cpf, email, phone, city, status, economy_ytd, projected_5y, created_at
@@ -90,20 +122,6 @@ async function getDashboardData() {
       SELECT id, vida_account_id, name, cpf
       FROM vida_dependents
       ORDER BY id DESC;
-      `,
-    ),
-    query(
-      `
-      SELECT id, name, cnpj, category, phone, address, city, region, lat, lng, status, show_on_map, show_on_offers, logo, created_at
-      FROM partners
-      ORDER BY created_at DESC;
-      `,
-    ),
-    query(
-      `
-      SELECT id, partner_id, title, description, discount, valid_until, status, image
-      FROM offers
-      ORDER BY created_at DESC;
       `,
     ),
     query(
@@ -145,10 +163,9 @@ async function getDashboardData() {
   }))
 
   return {
+    ...publicData,
     students,
     vidas,
-    partners: partnersRes.rows.map(mapPartner),
-    offers: offersRes.rows.map(mapOffer),
     auditLogs: logsRes.rows.map(mapLog),
   }
 }
@@ -163,8 +180,10 @@ export async function handler(event) {
       return json(200, { ok: true })
     }
 
+    // GET público devolve só parceiros/ofertas; com token de admin, devolve tudo.
     if (event.httpMethod === 'GET') {
-      const data = await getDashboardData()
+      const admin = verifyAdmin(event)
+      const data = admin ? await getAdminData() : await getPublicData()
       return json(200, { ok: true, ...data })
     }
 
@@ -178,13 +197,36 @@ export async function handler(event) {
     if (action === 'adminLogin') {
       const email = String(payload.email || '').trim().toLowerCase()
       const password = String(payload.password || '')
+
+      // Busca só pelo e-mail: a senha é conferida em código, não no SQL,
+      // porque agora ela está hasheada (e o compare precisa ser timing-safe).
       const result = await query(
-        `SELECT id, name, email, role FROM admin_users WHERE lower(email)= $1 AND password = $2 LIMIT 1;`,
-        [email, password],
+        `SELECT id, name, email, role, password FROM admin_users WHERE lower(email) = $1 LIMIT 1;`,
+        [email],
       )
       if (!result.rowCount) return json(401, { error: 'Credenciais administrativas inválidas.' })
-      return json(200, { ok: true, admin: result.rows[0] })
+
+      const admin = result.rows[0]
+      const { ok, needsRehash } = verifyPassword(password, admin.password)
+      if (!ok) return json(401, { error: 'Credenciais administrativas inválidas.' })
+
+      // Migração transparente: quem ainda estava em texto puro sai daqui hasheado.
+      if (needsRehash) {
+        await query(`UPDATE admin_users SET password = $1 WHERE id = $2;`, [hashPassword(password), admin.id])
+      }
+
+      return json(200, {
+        ok: true,
+        admin: { id: admin.id, name: admin.name, email: admin.email, role: admin.role },
+        token: issueAdminToken(admin),
+      })
     }
+
+    // Daqui pra baixo, tudo é escrita: exige token de admin válido.
+    const admin = verifyAdmin(event)
+    if (!admin) return unauthorized()
+    // O autor do log vem do token assinado, não do corpo do POST (que é forjável).
+    const actor = admin.name
 
     if (action === 'createStudent') {
       const fullName = String(payload.name || '').trim()
@@ -209,7 +251,7 @@ export async function handler(event) {
         `,
         [fullName, cpf, email, phone || null, city || null, status],
       )
-      await pushAudit(String(payload.actor || 'Admin Euplus'), 'Criou aluno', fullName)
+      await pushAudit(actor, 'Criou aluno', fullName)
       return json(200, { ok: true })
     }
 
@@ -219,7 +261,7 @@ export async function handler(event) {
       if (!Number.isFinite(id) || !status) return json(400, { error: 'Dados inválidos.' })
       const result = await query(`UPDATE registrations SET status = $1 WHERE id = $2 RETURNING full_name;`, [status, id])
       if (!result.rowCount) return json(404, { error: 'Aluno não encontrado.' })
-      await pushAudit(String(payload.actor || 'Admin Euplus'), 'Atualizou status', `${result.rows[0].full_name} para ${status}`)
+      await pushAudit(actor, 'Atualizou status', `${result.rows[0].full_name} para ${status}`)
       return json(200, { ok: true })
     }
 
@@ -257,7 +299,7 @@ export async function handler(event) {
           depCpf || null,
         ])
       }
-      await pushAudit(String(payload.actor || 'Admin Euplus'), 'Criou Vida', fullName)
+      await pushAudit(actor, 'Criou Vida', fullName)
       return json(200, { ok: true })
     }
 
@@ -267,7 +309,7 @@ export async function handler(event) {
       if (!Number.isFinite(id) || !status) return json(400, { error: 'Dados inválidos.' })
       const result = await query(`UPDATE vida_accounts SET status = $1 WHERE id = $2 RETURNING full_name;`, [status, id])
       if (!result.rowCount) return json(404, { error: 'Vida não encontrado.' })
-      await pushAudit(String(payload.actor || 'Admin Euplus'), 'Atualizou status de Vida', `${result.rows[0].full_name} para ${status}`)
+      await pushAudit(actor, 'Atualizou status de Vida', `${result.rows[0].full_name} para ${status}`)
       return json(200, { ok: true })
     }
 
@@ -302,7 +344,7 @@ export async function handler(event) {
             id,
           ],
         )
-        await pushAudit(String(payload.actor || 'Admin Euplus'), 'Atualizou parceiro', String(partner.name))
+        await pushAudit(actor, 'Atualizou parceiro', String(partner.name))
       } else {
         await query(
           `
@@ -325,7 +367,7 @@ export async function handler(event) {
             partner.logo || null,
           ],
         )
-        await pushAudit(String(payload.actor || 'Admin Euplus'), 'Criou parceiro', String(partner.name))
+        await pushAudit(actor, 'Criou parceiro', String(partner.name))
       }
       return json(200, { ok: true })
     }
@@ -354,7 +396,7 @@ export async function handler(event) {
             id,
           ],
         )
-        await pushAudit(String(payload.actor || 'Admin Euplus'), 'Atualizou oferta', String(offer.title))
+        await pushAudit(actor, 'Atualizou oferta', String(offer.title))
       } else {
         await query(
           `
@@ -371,7 +413,7 @@ export async function handler(event) {
             offer.image || null,
           ],
         )
-        await pushAudit(String(payload.actor || 'Admin Euplus'), 'Criou oferta', String(offer.title))
+        await pushAudit(actor, 'Criou oferta', String(offer.title))
       }
       return json(200, { ok: true })
     }
