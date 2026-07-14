@@ -211,15 +211,6 @@ const offers = [
     badgeClass: 'bg-tertiary text-on-tertiary',
     image: '/IMG/vitaliz-aniversario.png',
   },
-  {
-    title: 'Supermercado Guidotti',
-    tag: 'Mercado',
-    oldPrice: 'Em julho',
-    price: 'Melhores preços',
-    badge: 'EM JULHO',
-    badgeClass: 'bg-error text-white',
-    image: '/IMG/guidotti-em-breve.jpeg',
-  },
 ]
 
 const navLinks = [
