@@ -7,8 +7,11 @@ export default defineConfig({
   plugins: [
     react(),
     VitePWA({
-      registerType: 'autoUpdate',
-      injectRegister: 'auto',
+      // 'prompt' + ReloadPrompt: o usuário decide quando atualizar.
+      // Com 'autoUpdate' o SW troca em background, mas a aba aberta segue no bundle
+      // velho até um reload manual — foi o que prendeu o cliente na versão antiga.
+      registerType: 'prompt',
+      injectRegister: null,
       includeAssets: ['favicon.svg', 'apple-touch-icon.png'],
       manifest: {
         name: 'EuPlus — Inteligência Financeira',
