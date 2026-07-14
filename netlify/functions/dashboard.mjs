@@ -1,5 +1,5 @@
 import { query } from './_db.mjs'
-import { issueAdminToken, verifyAdmin, hashPassword, verifyPassword } from './_auth.mjs'
+import { issueAdminToken, verifyAdmin, hashPassword, verifyPassword, isAuthConfigured } from './_auth.mjs'
 
 const MAX_DEPENDENTS = 3
 
@@ -195,6 +195,15 @@ export async function handler(event) {
     const action = String(payload.action || '')
 
     if (action === 'adminLogin') {
+      // Sem o segredo não dá pra emitir sessão. Falha explícita: um 500 genérico aqui
+      // manda o operador caçar bug no código quando o problema é configuração.
+      if (!isAuthConfigured()) {
+        console.error('ADMIN_TOKEN_SECRET ausente no runtime da função — login impossível')
+        return json(503, {
+          error: 'Autenticação não configurada no servidor (ADMIN_TOKEN_SECRET ausente no escopo Functions).',
+        })
+      }
+
       const email = String(payload.email || '').trim().toLowerCase()
       const password = String(payload.password || '')
 

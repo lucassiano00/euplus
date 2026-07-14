@@ -4,6 +4,8 @@ import { createHmac, timingSafeEqual, randomBytes, scryptSync } from 'node:crypt
 const SECRET = process.env.ADMIN_TOKEN_SECRET
 const TOKEN_TTL_MS = 8 * 60 * 60 * 1000
 
+export const isAuthConfigured = () => Boolean(SECRET)
+
 const sign = (body) => createHmac('sha256', SECRET).update(body).digest('base64url')
 
 // Comparação em tempo constante: um === vaza a assinatura por timing.
