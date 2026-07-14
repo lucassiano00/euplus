@@ -3,7 +3,7 @@
 import assert from 'node:assert/strict'
 
 process.env.ADMIN_TOKEN_SECRET = 'segredo-de-teste-bem-longo-123'
-const { issueAdminToken, verifyAdmin, hashPassword, verifyPassword } = await import('./_auth.mjs')
+const { issueAdminToken, verifyAdmin, hashPassword, verifyPassword } = await import('../netlify/functions/_auth.mjs')
 
 const bearer = (token) => ({ headers: { authorization: `Bearer ${token}` } })
 const ADMIN = { id: 7, name: 'Admin Euplus' }
