@@ -14,7 +14,6 @@ import {
   Building2,
   Croissant,
   Dumbbell,
-  Dog,
   Snowflake,
   Fingerprint,
   Fuel,
@@ -22,7 +21,6 @@ import {
   MapPin,
   Menu,
   Leaf,
-  Cog,
   Scissors,
   ShoppingBasket,
   ShoppingCart,
@@ -82,10 +80,6 @@ const partnerCategories: PartnerCategory[] = [
   { id: 'espetinho', label: 'Espetinho', icon: Utensils, color: 'text-orange-300', active: true },
   { id: 'otica', label: 'Ótica', icon: Glasses, color: 'text-indigo-300', active: true },
   { id: 'farmacia', label: 'Farmácia', icon: Pill, color: 'text-rose-300', active: true },
-  { id: 'papelaria', label: 'Papelaria', icon: ShoppingBasket, color: 'text-blue-300', active: false, comingSoon: true },
-  { id: 'petshop', label: 'Petshop', icon: Dog, color: 'text-fuchsia-300', active: false, comingSoon: true },
-  { id: 'oficina-mecanica', label: 'Oficina mecânica', icon: Cog, color: 'text-zinc-300', active: false, comingSoon: true },
-  { id: 'padaria', label: 'Padaria', icon: Croissant, color: 'text-orange-300', active: false, comingSoon: true },
 ]
 
 const categoryAliases: Record<string, string[]> = {
@@ -108,10 +102,6 @@ const categoryAliases: Record<string, string[]> = {
   gas: ['gas'],
   construtora: ['construtora', 'construcao', 'construção', 'projeto', 'pinheiros'],
   odontologia: ['odontologia'],
-  papelaria: ['papelaria'],
-  petshop: ['petshop', 'pet shop'],
-  'oficina-mecanica': ['oficina mecanica', 'oficina mecânica', 'mecanica'],
-  padaria: ['padaria'],
   'salao-beleza-cs': ['salao de beleza', 'salao beleza', 'beleza'],
   academia: ['academia', 'roosters', 'atletica'],
   cfc: ['cfc', 'condutores', 'autoescola', 'auto escola'],
