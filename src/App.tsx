@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import type { ComponentType, ReactNode } from 'react'
 import { motion } from 'motion/react'
 import Hls from 'hls.js'
-import { Gift, Percent, Student, UserPlus } from '@phosphor-icons/react'
+import { Gift, Percent, UserPlus } from '@phosphor-icons/react'
 import DashboardApp from './DashboardApp'
 import {
   ArrowRight,
@@ -14,6 +14,7 @@ import {
   Building2,
   Croissant,
   Dumbbell,
+  Sandwich,
   Snowflake,
   Fingerprint,
   Fuel,
@@ -78,6 +79,7 @@ const partnerCategories: PartnerCategory[] = [
   { id: 'hortifruti', label: 'Hortifruti', icon: ShoppingBasket, color: 'text-emerald-300', active: true },
   { id: 'produtos-naturais', label: 'Produtos naturais', icon: Leaf, color: 'text-emerald-300', active: true },
   { id: 'espetinho', label: 'Espetinho', icon: Utensils, color: 'text-orange-300', active: true },
+  { id: 'esfiharia', label: 'Esfiharia e Hamburgueria', icon: Sandwich, color: 'text-amber-300', active: true },
   { id: 'otica', label: 'Ótica', icon: Glasses, color: 'text-indigo-300', active: true },
   { id: 'farmacia', label: 'Farmácia', icon: Pill, color: 'text-rose-300', active: true },
 ]
@@ -96,6 +98,7 @@ const categoryAliases: Record<string, string[]> = {
   hortifruti: ['hortifruti', 'horti fruti', 'horti', 'fruti'],
   'produtos-naturais': ['produtos naturais', 'emporio canto verde', 'empório canto verde', 'canto verde', 'natural'],
   espetinho: ['espetinho', 'rotula', 'rótula'],
+  esfiharia: ['esfiharia', 'esfiha', 'hamburgueria', 'hamburger', 'lanche', 'toka do tio'],
   otica: ['otica', 'ótica', 'optica', 'optica'],
   farmacia: ['farmacia', 'farmácia', 'drogaria'],
   barbearia: ['barbearia'],
@@ -136,7 +139,7 @@ const fallbackPartners: PublicPartner[] = [
   { id: 'fp-7', name: 'Lava rápido Nick', category: 'Lavacar', phone: '19 99844 0616', address: 'Rua1 N: 76 bairro Recanto Portinari (Conhecido como rua João Cardoso Filho N:76)', city: 'Artur Nogueira', region: 'UNASP', status: 'ATIVO', showOnMap: true, mapQuery: 'Rua João Cardoso Filho, 76, Artur Nogueira', discount: '5%' },
   { id: 'fp-8', name: 'Unigas tele entrega', category: 'Gás', phone: '19 99171 8015', address: 'Rua Hosana Cristina de Souza, 267, Bairro Universitário', city: 'Engenheiro Coelho', region: 'UNASP', status: 'ATIVO', showOnMap: true, discount: '5%' },
   { id: 'fp-9', name: 'Massas delivery', category: 'Tele entrega massas', phone: '19 97161 4336', address: '', city: 'Engenheiro Coelho', region: 'UNASP', status: 'ATIVO', showOnMap: false, discount: '8%' },
-  { id: 'fp-10', name: 'Supermercado Guidotti', category: 'Mercado', phone: '', address: 'Rua Celina Cavalheiro Francischetti, 319, Jardim Luiz Favero', city: 'Engenheiro Coelho', region: 'UNASP', status: 'ATIVO', showOnMap: true, note: 'Observação: você já está cadastrado e os descontos são automáticos no caixa do mercado, não havendo necessidade de identificação.', flyer: '/IMG/encarte-guidotti.jpg' },
+  { id: 'fp-10', name: 'Supermercado Guidotti', category: 'Mercado', phone: '', address: 'Rua Celina Cavalheiro Francischetti, 319, Jardim Luiz Favero', city: 'Engenheiro Coelho', region: 'UNASP', status: 'ATIVO', showOnMap: true, note: 'Observação: você já está cadastrado e os descontos são automáticos no caixa do mercado, não havendo necessidade de identificação.', flyer: '/IMG/guidotti-melhores-precos.jpg' },
   { id: 'fp-10b', name: 'Hortifruti', category: 'Hortifruti', phone: '19 99954 5292', address: '', city: 'Engenheiro Coelho', region: 'UNASP', status: 'ATIVO', showOnMap: false, discount: '5%' },
   { id: 'fp-11', name: 'Odontologia', category: 'Consultório Odontológico', phone: '11 97530 2618', address: 'Rua Minas Gerais, 254, Jardim Amalia', city: 'Engenheiro Coelho', region: 'UNASP', status: 'ATIVO', showOnMap: true, discount: '10% à vista e 5% no crédito' },
   { id: 'fp-12', name: 'Auto escola Lopes', category: 'CFC', phone: '19 98841 6068', address: 'Rua Antônio Batistela, 130, Jardim Brasil', city: 'Engenheiro Coelho', region: 'UNASP', status: 'ATIVO', showOnMap: true, discount: '5%' },
@@ -153,6 +156,7 @@ const fallbackPartners: PublicPartner[] = [
   { id: 'fp-jhows-barbearia', name: "Jhow's Barbearia", category: 'Barbearia', phone: '15 99653 4206', address: '', city: 'Engenheiro Coelho', region: 'UNASP', status: 'ATIVO', showOnMap: false, discount: '5%' },
   { id: 'fp-roosters-academy', name: 'Roosters Academy', category: 'Academia', phone: '19 3858 9639', address: '', city: 'Engenheiro Coelho', region: 'UNASP', status: 'ATIVO', showOnMap: false, discount: '15%' },
   { id: 'fp-salao-unasp', name: 'Salão de beleza do UNASP', category: 'Salão de beleza', phone: '15 99612 8875', address: '', city: 'Engenheiro Coelho', region: 'UNASP', status: 'ATIVO', showOnMap: false, discount: '5%' },
+  { id: 'fp-esfiharia', name: 'Esfiharia e Hamburgueria', category: 'Esfiharia e Hamburgueria', phone: '19 98142 8275', address: '', city: 'Engenheiro Coelho', region: 'UNASP', status: 'ATIVO', showOnMap: false, discount: '5%' },
 ]
 
 const offers = [
@@ -195,11 +199,38 @@ const offers = [
   {
     title: 'Nova Ótica Vitaliz',
     tag: 'Ótica',
-    oldPrice: 'Promoção limitada',
-    price: 'Aniversário premiado',
-    badge: 'PROMOÇÃO',
+    oldPrice: 'Preço de tabela',
+    price: 'Associados pagam menos',
+    badge: 'CLIENTE EUPLUS',
     badgeClass: 'bg-tertiary text-on-tertiary',
-    image: '/IMG/vitaliz-aniversario.png',
+    image: '/IMG/vitaliz-euplus.jpg',
+  },
+  {
+    title: 'Mercado Guidotti',
+    tag: 'Mercado',
+    oldPrice: 'Região de Eng. Coelho',
+    price: 'Os melhores preços',
+    badge: 'CLIENTE EUPLUS',
+    badgeClass: 'bg-secondary text-on-secondary',
+    image: '/IMG/guidotti-melhores-precos.jpg',
+  },
+  {
+    title: 'Esfiharia e Hamburgueria',
+    tag: 'Toka do Tio Food Service',
+    oldPrice: 'Preço normal',
+    price: '5% de desconto',
+    badge: '5% OFF',
+    badgeClass: 'bg-primary text-on-primary',
+    image: '/IMG/toka-do-tio.jpg',
+  },
+  {
+    title: "Jhow's Barbearia",
+    tag: 'Barbearia',
+    oldPrice: 'Preço normal',
+    price: '5% a menos por corte',
+    badge: '5% OFF',
+    badgeClass: 'bg-primary text-on-primary',
+    image: '/IMG/jhows-barbearia.jpg',
   },
 ]
 
@@ -593,14 +624,6 @@ function AnimatedBanner() {
                       glow: 'from-[#3b82f633]',
                     },
                     {
-                      label: 'Área do aluno',
-                      description: 'Área exclusiva',
-                      href: '#alunos',
-                      icon: Student,
-                      accent: 'text-[#34d399]',
-                      glow: 'from-[#34d39930]',
-                    },
-                    {
                       label: 'Benefícios',
                       description: 'Veja vantagens exclusivas',
                       href: '#beneficios',
@@ -638,7 +661,7 @@ function AnimatedBanner() {
                   ))}
                 </div>
               </div>
-              <div className="hidden grid-cols-4 gap-2.5 sm:grid">
+              <div className="hidden grid-cols-3 gap-2.5 sm:grid">
                 {[
                   {
                     label: 'Criar conta',
@@ -647,14 +670,6 @@ function AnimatedBanner() {
                     icon: UserPlus,
                     accent: 'text-[#3b82f6]',
                     glow: 'from-[#3b82f633]',
-                  },
-                  {
-                    label: 'Área do aluno',
-                    description: 'Área exclusiva',
-                    href: '#alunos',
-                    icon: Student,
-                    accent: 'text-[#34d399]',
-                    glow: 'from-[#34d39930]',
                   },
                   {
                     label: 'Benefícios',
@@ -1202,7 +1217,7 @@ function PartnerSection() {
                 />
               </button>
               <p className="px-4 py-3 text-center text-xs text-outline">
-                Toque para ampliar · Preços atualizados semanalmente
+                Toque para ampliar · Descontos rotativos e automáticos, toda semana e fim de semana
               </p>
             </Reveal>
 
