@@ -139,7 +139,7 @@ const fallbackPartners: PublicPartner[] = [
   { id: 'fp-7', name: 'Lava rápido Nick', category: 'Lavacar', phone: '19 99844 0616', address: 'Rua1 N: 76 bairro Recanto Portinari (Conhecido como rua João Cardoso Filho N:76)', city: 'Artur Nogueira', region: 'UNASP', status: 'ATIVO', showOnMap: true, mapQuery: 'Rua João Cardoso Filho, 76, Artur Nogueira', discount: '5%' },
   { id: 'fp-8', name: 'Unigas tele entrega', category: 'Gás', phone: '19 99171 8015', address: 'Rua Hosana Cristina de Souza, 267, Bairro Universitário', city: 'Engenheiro Coelho', region: 'UNASP', status: 'ATIVO', showOnMap: true, discount: '5%' },
   { id: 'fp-9', name: 'Massas delivery', category: 'Tele entrega massas', phone: '19 97161 4336', address: '', city: 'Engenheiro Coelho', region: 'UNASP', status: 'ATIVO', showOnMap: false, discount: '8%' },
-  { id: 'fp-10', name: 'Supermercado Guidotti', category: 'Mercado', phone: '', address: 'Rua Celina Cavalheiro Francischetti, 319, Jardim Luiz Favero', city: 'Engenheiro Coelho', region: 'UNASP', status: 'ATIVO', showOnMap: true, note: 'Observação: você já está cadastrado e os descontos são automáticos no caixa do mercado, não havendo necessidade de identificação.', flyer: '/IMG/guidotti-melhores-precos.jpg' },
+  { id: 'fp-10', name: 'Supermercado Guidotti', category: 'Mercado', phone: '', address: 'Rua Celina Cavalheiro Francischetti, 319, Jardim Luiz Favero', city: 'Engenheiro Coelho', region: 'UNASP', status: 'ATIVO', showOnMap: true, note: 'Observação: você já está cadastrado e os descontos são automáticos no caixa do mercado, não havendo necessidade de identificação.', flyer: '/IMG/guidotti-descontos-rotativos.jpg' },
   { id: 'fp-10b', name: 'Hortifruti', category: 'Hortifruti', phone: '19 99954 5292', address: '', city: 'Engenheiro Coelho', region: 'UNASP', status: 'ATIVO', showOnMap: false, discount: '5%' },
   { id: 'fp-11', name: 'Odontologia', category: 'Consultório Odontológico', phone: '11 97530 2618', address: 'Rua Minas Gerais, 254, Jardim Amalia', city: 'Engenheiro Coelho', region: 'UNASP', status: 'ATIVO', showOnMap: true, discount: '10% à vista e 5% no crédito' },
   { id: 'fp-12', name: 'Auto escola Lopes', category: 'CFC', phone: '19 98841 6068', address: 'Rua Antônio Batistela, 130, Jardim Brasil', city: 'Engenheiro Coelho', region: 'UNASP', status: 'ATIVO', showOnMap: true, discount: '5%' },
@@ -231,6 +231,15 @@ const offers = [
     badge: '5% OFF',
     badgeClass: 'bg-primary text-on-primary',
     image: '/IMG/jhows-barbearia.jpg',
+  },
+  {
+    title: 'SCbeauty Studio',
+    tag: 'Salão de beleza',
+    oldPrice: 'Preço normal',
+    price: '5% de desconto',
+    badge: '5% OFF',
+    badgeClass: 'bg-primary text-on-primary',
+    image: '/IMG/scbeauty-studio.jpg',
   },
 ]
 

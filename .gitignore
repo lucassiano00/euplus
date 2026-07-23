@@ -34,3 +34,6 @@ dist-ssr
 # Tooling / test artifacts
 .antigravitycli
 test-results
+
+# Client media (WhatsApp audio/photos) — not repo material
+audios/
