@@ -239,7 +239,6 @@ const navLinks = [
   { label: 'Promoção', href: '#' },
   { label: 'Cadastro', href: '#cadastro' },
   { label: 'Benefícios', href: '#' },
-  { label: 'Alunos', href: '#alunos' },
   { label: 'Simulador', href: '#simulador' },
 ]
 
@@ -1409,7 +1408,6 @@ function RegistrationSection({
     phone: '',
     cep: '',
     city: '',
-    studentCode: '',
   })
   const [isSaving, setIsSaving] = useState(false)
   const [saveMessage, setSaveMessage] = useState<string | null>(null)
@@ -1450,7 +1448,6 @@ function RegistrationSection({
           phone: mainForm.phone.trim(),
           cep: mainForm.cep.trim(),
           city: mainForm.city.trim(),
-          studentCode: mainForm.studentCode.trim(),
         }),
       })
 
@@ -1601,19 +1598,6 @@ Dúvidas? Entre em contato:
                     onChange={(event) => setMainForm((prev) => ({ ...prev, city: event.target.value }))}
                   />
                 </div>
-              </div>
-
-              <div className="space-y-1.5">
-                <label className="text-xs font-bold uppercase tracking-widest text-outline">
-                  Código do Estudante <span className="font-medium normal-case text-outline/80">(opcional)</span>
-                </label>
-                <input
-                  className="w-full rounded-xl border-none bg-surface-container-highest p-4 text-on-surface transition-all focus:ring-2 focus:ring-primary/30"
-                  placeholder="EX: EUP-2024-XXXX"
-                  type="text"
-                  value={mainForm.studentCode}
-                  onChange={(event) => setMainForm((prev) => ({ ...prev, studentCode: event.target.value }))}
-                />
               </div>
 
               <button
