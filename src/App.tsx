@@ -12,7 +12,6 @@ import {
   ChevronRight,
   CircleDollarSign,
   Building2,
-  Croissant,
   Dumbbell,
   Sandwich,
   Snowflake,
@@ -60,10 +59,8 @@ type PartnerCategory = {
 
 const partnerCategories: PartnerCategory[] = [
   { id: 'manicure', label: 'Manicure', icon: Sparkles, color: 'text-pink-300', active: true },
-  { id: 'manutencao-ar', label: 'Manutenção de ar-condicionado', icon: Wrench, color: 'text-cyan-300', active: true },
   { id: 'eletricista', label: 'Eletricista', icon: Wrench, color: 'text-amber-300', active: true },
   { id: 'lavacar', label: 'Lavacar', icon: CarTaxiFront, color: 'text-cyan-300', active: true },
-  { id: 'tele-entrega-massas', label: 'Tele entrega massas', icon: Croissant, color: 'text-orange-300', active: true },
   { id: 'restaurante', label: 'Restaurante', icon: Utensils, color: 'text-tertiary', active: true },
   { id: 'posto-combustivel', label: 'Posto de combustível', icon: Fuel, color: 'text-secondary', active: true },
   { id: 'sorveteria', label: 'Sorveteria', icon: Snowflake, color: 'text-sky-300', active: true },
@@ -86,10 +83,8 @@ const partnerCategories: PartnerCategory[] = [
 
 const categoryAliases: Record<string, string[]> = {
   manicure: ['manicure', 'nails'],
-  'manutencao-ar': ['manutencao de ar-condicionado', 'ar-condicionado', 'ar cond', 'refrig'],
   eletricista: ['eletricista', 'pintura e eletrica', 'eletrica'],
   lavacar: ['lavacar', 'lava car', 'lavagem'],
-  'tele-entrega-massas': ['tele entrega massas', 'massas', 'padaria'],
   restaurante: ['restaurante', 'gastronomia'],
   'posto-combustivel': ['posto', 'posto de combustivel', 'combustivel', 'auto posto', 'posto br'],
   sorveteria: ['sorveteria', 'sorvete'],
@@ -126,21 +121,22 @@ type PublicPartner = {
   // ponytail: encarte semanal como imagem — o mercado já entrega a arte pronta toda semana.
   // Trocar 1 arquivo > redigitar 20+ preços (e errar preço é erro caro).
   flyer?: string
+  // Parceiro fechado mas sem condição divulgável ainda: aparece sem dados e sem contato.
+  comingSoon?: boolean
 }
 
 const fallbackPartners: PublicPartner[] = [
   { id: 'fp-1', name: 'Manicure', category: 'Manicure', phone: '19 99986 6909', address: '', city: 'Cidade Universitária', region: 'UNASP', status: 'ATIVO', showOnMap: false, discount: '10%' },
-  { id: 'fp-2', name: 'Eletricista', category: 'Eletricista', phone: '11 95202 6914', address: '', city: 'Engenheiro Coelho', region: 'UNASP', status: 'ATIVO', showOnMap: false, discount: '5 a 10%' },
-  { id: 'fp-4', name: 'Ar condicionado', category: 'Manutenção de ar-condicionado', phone: '11 95202 6914', address: '', city: 'Engenheiro Coelho', region: 'UNASP', status: 'ATIVO', showOnMap: false, discount: '5 a 10%' },
+  { id: 'fp-2', name: 'Eletricista', category: 'Eletricista', phone: '19 99317 9673', address: '', city: 'Engenheiro Coelho', region: 'UNASP', status: 'ATIVO', showOnMap: false, discount: '10%' },
   // ponytail: telefone igual ao do registro no banco (prt-4) de propósito — é a chave do
   // mergePartnersWithFallback. Sem ela vira card duplicado e o endereço novo não sobrescreve o antigo.
   { id: 'fp-5', name: "Panato's Restaurante LTDA", category: 'Restaurante', phone: '19 99645 3980', address: 'Rua Um, Engenheiro Coelho - SP, 13165-000', city: 'Engenheiro Coelho', region: 'UNASP', status: 'ATIVO', showOnMap: true, mapQuery: 'Rua Um, Engenheiro Coelho - SP, 13165-000', discount: '7%' },
-  { id: 'fp-6', name: 'Nova Ótica Vitaliz', category: 'Ótica', phone: '19 99782 6744', address: 'Rua 7 de Setembro, 381, Centro', city: 'Engenheiro Coelho', region: 'UNASP', status: 'ATIVO', showOnMap: true, discount: 'na loja' },
+  // ponytail: mapQuery sem "sala 51" — o número da sala derruba o pin do Google Maps.
+  { id: 'fp-6', name: 'Nova Ótica Vitaliz', category: 'Ótica', phone: '19 99782 6744', address: 'Rua 7 de Setembro, 381, sala 51, Centro', city: 'Engenheiro Coelho', region: 'UNASP', status: 'ATIVO', showOnMap: true, mapQuery: 'Rua 7 de Setembro, 381, Engenheiro Coelho', discount: '5% a 20%', note: 'Descontos especiais formalizados:\n5% — apenas armação OU apenas lente.\n10% — na compra de lente + armações de grife.\n20% — na compra de lente + armação da nossa marca própria Vitaliz.\nExame de vista GRATUITO com profissional qualificada, com atendimento de qualidade e cuidado com a sua visão.' },
   { id: 'fp-7', name: 'Lava rápido Nick', category: 'Lavacar', phone: '19 99844 0616', address: 'Rua1 N: 76 bairro Recanto Portinari (Conhecido como rua João Cardoso Filho N:76)', city: 'Artur Nogueira', region: 'UNASP', status: 'ATIVO', showOnMap: true, mapQuery: 'Rua João Cardoso Filho, 76, Artur Nogueira', discount: '5%' },
-  { id: 'fp-8', name: 'Unigas tele entrega', category: 'Gás', phone: '19 99171 8015', address: 'Rua Hosana Cristina de Souza, 267, Bairro Universitário', city: 'Engenheiro Coelho', region: 'UNASP', status: 'ATIVO', showOnMap: true, discount: '5%' },
-  { id: 'fp-9', name: 'Massas delivery', category: 'Tele entrega massas', phone: '19 97161 4336', address: '', city: 'Engenheiro Coelho', region: 'UNASP', status: 'ATIVO', showOnMap: false, discount: '8%' },
+  { id: 'fp-8', name: 'Unigas tele entrega', category: 'Gás', phone: '19 99171 8015', address: 'Rua Hosana Cristina de Souza, 267, Bairro Universitário', city: 'Engenheiro Coelho', region: 'UNASP', status: 'ATIVO', showOnMap: true, discount: '4%' },
   { id: 'fp-10', name: 'Supermercado Guidotti', category: 'Mercado', phone: '', address: 'Rua Celina Cavalheiro Francischetti, 319, Jardim Luiz Favero', city: 'Engenheiro Coelho', region: 'UNASP', status: 'ATIVO', showOnMap: true, note: 'Observação: você já está cadastrado e os descontos são automáticos no caixa do mercado, não havendo necessidade de identificação.', flyer: '/IMG/guidotti-descontos-rotativos.jpg' },
-  { id: 'fp-10b', name: 'Hortifruti', category: 'Hortifruti', phone: '19 99954 5292', address: '', city: 'Engenheiro Coelho', region: 'UNASP', status: 'ATIVO', showOnMap: false, discount: '5%' },
+  { id: 'fp-10b', name: 'Hortifruti', category: 'Hortifruti', phone: '19 99954 5292', address: '', city: 'Engenheiro Coelho', region: 'UNASP', status: 'ATIVO', showOnMap: false, discount: '10%' },
   { id: 'fp-11', name: 'Odontologia', category: 'Consultório Odontológico', phone: '11 97530 2618', address: 'Rua Minas Gerais, 254, Jardim Amalia', city: 'Engenheiro Coelho', region: 'UNASP', status: 'ATIVO', showOnMap: true, discount: '10% à vista e 5% no crédito' },
   { id: 'fp-12', name: 'Auto escola Lopes', category: 'CFC', phone: '19 98841 6068', address: 'Rua Antônio Batistela, 130, Jardim Brasil', city: 'Engenheiro Coelho', region: 'UNASP', status: 'ATIVO', showOnMap: true, discount: '5%' },
   { id: 'fp-13', name: 'Farmácia', category: 'Farmácia', phone: '19 99714 2695', address: 'Rua Minas Gerais, 167, Jardim América', city: 'Engenheiro Coelho', region: 'UNASP', status: 'ATIVO', showOnMap: true, discount: 'De 5 a 15%' },
@@ -149,12 +145,11 @@ const fallbackPartners: PublicPartner[] = [
   { id: 'fp-16', name: 'Moto táxi', category: 'Motorista', phone: '19 99968 0621', address: '', city: 'Engenheiro Coelho', region: 'UNASP', status: 'ATIVO', showOnMap: false, discount: '5%' },
   { id: 'fp-17', name: 'Motorista carro', category: 'Motorista', phone: '11 98224 5890', address: '', city: 'Engenheiro Coelho', region: 'UNASP', status: 'ATIVO', showOnMap: false, discount: '5%' },
   { id: 'fp-18', name: 'Sorveteria', category: 'Sorveteria', phone: '', address: 'Rua 7 de Setembro, 515', city: 'Engenheiro Coelho', region: 'UNASP', status: 'ATIVO', showOnMap: true },
-  { id: 'fp-20', name: 'Motorista de auto escola', category: 'Motorista', phone: '19 99862 6766', address: '', city: 'Engenheiro Coelho', region: 'UNASP', status: 'ATIVO', showOnMap: false, discount: '12%' },
   { id: 'fp-produtos-naturais', name: 'Produtos naturais', category: 'Produtos naturais', phone: '19 99120 8014', address: 'Rua Maria Simões de Andrade, 1768, esquina Rua Rui Barbosa, entrada principal cidade, Jardim Amaro', city: 'Artur Nogueira', region: 'UNASP', status: 'ATIVO', showOnMap: true, discount: '15%' },
-  { id: 'fp-espetinho-rotula', name: 'Espetinho da rótula', category: 'Espetinho', phone: '19 99608 9626', address: '', city: 'Engenheiro Coelho', region: 'UNASP', status: 'ATIVO', showOnMap: false, discount: 'no local' },
+  { id: 'fp-espetinho-rotula', name: 'Espetinho da rótula', category: 'Espetinho', phone: '19 99608 9626', address: '', city: 'Engenheiro Coelho', region: 'UNASP', status: 'ATIVO', showOnMap: false, discount: '5%' },
   { id: 'fp-pinheiros-construtora', name: "Pinheiro's Construtora", category: 'Construtora', phone: '19 99834 3441', address: '', city: 'Engenheiro Coelho', region: 'UNASP', status: 'ATIVO', showOnMap: false, discount: '10% em projetos e 2,5% em construção/execução' },
   { id: 'fp-jhows-barbearia', name: "Jhow's Barbearia", category: 'Barbearia', phone: '15 99653 4206', address: '', city: 'Engenheiro Coelho', region: 'UNASP', status: 'ATIVO', showOnMap: false, discount: '5%' },
-  { id: 'fp-roosters-academy', name: 'Roosters Academy', category: 'Academia', phone: '19 3858 9639', address: '', city: 'Engenheiro Coelho', region: 'UNASP', status: 'ATIVO', showOnMap: false, discount: '15%' },
+  { id: 'fp-roosters-academy', name: 'Roosters Academy', category: 'Academia', phone: '', address: '', city: 'Engenheiro Coelho', region: 'UNASP', status: 'ATIVO', showOnMap: false, comingSoon: true },
   { id: 'fp-salao-unasp', name: 'Salão de beleza do UNASP', category: 'Salão de beleza', phone: '15 99612 8875', address: '', city: 'Engenheiro Coelho', region: 'UNASP', status: 'ATIVO', showOnMap: false, discount: '5%' },
   { id: 'fp-esfiharia', name: 'Esfiharia e Hamburgueria', category: 'Esfiharia e Hamburgueria', phone: '19 98142 8275', address: '', city: 'Engenheiro Coelho', region: 'UNASP', status: 'ATIVO', showOnMap: false, discount: '5%' },
 ]
@@ -1049,7 +1044,7 @@ function PartnerSection() {
     .filter((item) => item.categoryId === selectedCategory.id && toRegionId(item.partner.region) === selectedRegion.id)
     .map((item) => item.partner)
   const primaryPartner = categoryPartners[0] ?? null
-  const forceContactOnly = selectedCategory.id === 'eletricista' || selectedCategory.id === 'manutencao-ar' || selectedCategory.id === 'manicure'
+  const forceContactOnly = selectedCategory.id === 'eletricista' || selectedCategory.id === 'manicure'
   const hasPrimaryAddress = Boolean(primaryPartner?.address?.trim())
   const canShowPrimaryMap = Boolean(primaryPartner?.showOnMap) && hasPrimaryAddress && !forceContactOnly
   const primaryLocationQuery = primaryPartner
@@ -1147,8 +1142,6 @@ function PartnerSection() {
                   <span translate="no" className="notranslate text-xs font-semibold tracking-wide">
                     {item.id === 'eletricista' ? (
                       'Eletricista'
-                    ) : item.id === 'manutencao-ar' ? (
-                      'Manutenção de ar-condicionado'
                     ) : isBeautyText(item.label) ? (
                       <span translate="no" className="notranslate">
                         {NO_TRANSLATE_BEAUTY_TEXT}
@@ -1198,8 +1191,6 @@ function PartnerSection() {
                   <span translate="no" className="notranslate text-sm font-semibold">
                     {item.id === 'eletricista' ? (
                       'Eletricista'
-                    ) : item.id === 'manutencao-ar' ? (
-                      'Manutenção de ar-condicionado'
                     ) : isBeautyText(item.label) ? (
                       <span translate="no" className="notranslate">
                         {NO_TRANSLATE_BEAUTY_TEXT}
@@ -1329,7 +1320,7 @@ function PartnerSection() {
                         ) : null}
                       </div>
                       {partner.note ? (
-                        <p className="mt-2 rounded-lg border border-yellow-400/25 bg-yellow-400/10 px-3 py-2 text-xs leading-relaxed text-yellow-200">
+                        <p className="mt-2 whitespace-pre-line rounded-lg border border-yellow-400/25 bg-yellow-400/10 px-3 py-2 text-xs leading-relaxed text-yellow-200">
                           {partner.note}
                         </p>
                       ) : null}
@@ -1365,10 +1356,12 @@ function PartnerSection() {
                           <p translate="no" className="notranslate truncate text-lg font-semibold leading-none text-white/95 sm:text-2xl">{title}</p>
                           <p translate="no" className="notranslate mt-1 text-xs text-white/70 sm:text-sm">{serviceTag}</p>
                           <div className="mt-2 flex flex-wrap gap-2">
-                            <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500/15 px-2 py-1 text-xs font-semibold text-emerald-300">
-                              <span className="h-2 w-2 rounded-full bg-emerald-400" />
-                              Online
-                            </span>
+                            {partner.comingSoon ? null : (
+                              <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500/15 px-2 py-1 text-xs font-semibold text-emerald-300">
+                                <span className="h-2 w-2 rounded-full bg-emerald-400" />
+                                Online
+                              </span>
+                            )}
                             {discountText ? (
                               <span className="rounded-full bg-emerald-500/15 px-2 py-1 text-xs font-semibold text-emerald-300">
                                 {discountText}
@@ -1382,7 +1375,11 @@ function PartnerSection() {
                           </div>
                         </div>
                       </div>
-                      {whatsappLink ? (
+                      {partner.comingSoon ? (
+                        <span className="mt-4 inline-flex w-full items-center justify-center rounded-xl border border-white/15 bg-white/5 px-3 py-2.5 text-base font-semibold text-on-surface-variant sm:px-4 sm:py-3 sm:text-lg">
+                          Em breve
+                        </span>
+                      ) : whatsappLink ? (
                         <a
                           href={whatsappLink}
                           target="_blank"
