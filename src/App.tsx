@@ -383,6 +383,13 @@ const offers: Offer[] = [
   },
 ]
 
+// Quem recebe o comprovante do Pix. Os números viram link de WhatsApp na seção de cadastro.
+const MENSAGEM_COMPROVANTE = 'Olá! Acabei de fazer meu cadastro na EuPlus e estou enviando o comprovante do pagamento.'
+const contatosPagamento = [
+  { name: 'Obe Daniel', phone: '19 98135-5054' },
+  { name: 'Clarisse', phone: '19 98224-6821' },
+]
+
 const navLinks = [
   { label: 'Inicio', href: '#' },
   { label: 'Promoção', href: '#' },
@@ -472,12 +479,11 @@ const getPartnerCategoryId = (partner: PublicPartner) => {
   return match?.id ?? null
 }
 
-const getWhatsAppLink = (phone: string) => {
+const getWhatsAppLink = (phone: string, message = 'Olá, vim pela EuPlus') => {
   const digits = onlyDigits(phone)
   if (!digits) return null
   const withCountry = digits.startsWith('55') ? digits : `55${digits}`
-  const defaultMessage = encodeURIComponent('Olá, vim pela EuPlus')
-  return `https://wa.me/${withCountry}?text=${defaultMessage}`
+  return `https://wa.me/${withCountry}?text=${encodeURIComponent(message)}`
 }
 
 const formatPhone = (value: string) => {
@@ -1663,18 +1669,30 @@ function RegistrationSection({
           <Reveal from="left" className="min-w-0 space-y-12">
             <div className="space-y-4">
               <h2 className="font-headline text-3xl font-bold sm:text-4xl md:text-5xl">Inicie sua Jornada</h2>
-              <p className="whitespace-pre-line text-base leading-relaxed text-on-surface-variant sm:text-lg">
-                {`Após preencher o cadastro, clique em 'Finalizar Cadastro' e realize o pagamento.
-
-Via Pix: 67.135.611/0001-18 (Obe Daniel Silemcieux). Envie o comprovante para um destes contatos:
-
-Obe Daniel — 19 98135-5054
-Clarisse — 19 98224-6821
-
-Parcelado em 12x de R$ 14,90 · à vista R$ 99,90
-
-Pagamento confirmado, em até 4 horas já poderá usar a plataforma no comércio cadastrado.`}
-              </p>
+              <div className="space-y-4 text-base leading-relaxed text-on-surface-variant sm:text-lg">
+                <p>Após preencher o cadastro, clique em 'Finalizar Cadastro' e realize o pagamento.</p>
+                <p>
+                  Via Pix: 67.135.611/0001-18 (Obe Daniel Silemcieux). Envie o comprovante para um destes contatos:
+                </p>
+                {/* Números clicáveis: abrem o WhatsApp já com o assunto certo (comprovante). */}
+                <ul className="space-y-2">
+                  {contatosPagamento.map((contato) => (
+                    <li key={contato.phone}>
+                      <a
+                        href={getWhatsAppLink(contato.phone, MENSAGEM_COMPROVANTE) ?? undefined}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="inline-flex items-center gap-2 rounded-lg border border-secondary/30 bg-secondary/10 px-3 py-2 font-semibold text-secondary transition hover:bg-secondary/20"
+                      >
+                        <MessageCircle className="h-4 w-4" />
+                        {contato.name} — {contato.phone}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+                <p>Parcelado em 12x de R$ 14,90 · à vista R$ 99,90</p>
+                <p>Pagamento confirmado, em até 4 horas já poderá usar a plataforma no comércio cadastrado.</p>
+              </div>
             </div>
 
             <form className="space-y-5">
