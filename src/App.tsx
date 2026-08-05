@@ -12,7 +12,12 @@ import {
   ChevronRight,
   CircleDollarSign,
   Building2,
+  Camera,
+  Cookie,
+  CupSoda,
   Dumbbell,
+  PawPrint,
+  Video,
   Sandwich,
   Snowflake,
   Fingerprint,
@@ -79,6 +84,11 @@ const partnerCategories: PartnerCategory[] = [
   { id: 'esfiharia', label: 'Esfiharia e Hamburgueria', icon: Sandwich, color: 'text-amber-300', active: true },
   { id: 'otica', label: 'Ótica', icon: Glasses, color: 'text-indigo-300', active: true },
   { id: 'farmacia', label: 'Farmácia', icon: Pill, color: 'text-rose-300', active: true },
+  { id: 'petshop', label: 'Petshop', icon: PawPrint, color: 'text-lime-300', active: true },
+  { id: 'fotografia', label: 'Fotografia', icon: Camera, color: 'text-slate-300', active: true },
+  { id: 'video-maker', label: 'Vídeo maker', icon: Video, color: 'text-red-300', active: true },
+  { id: 'trufaia', label: 'Trufas', icon: Cookie, color: 'text-amber-300', active: true },
+  { id: 'caldo-de-cana', label: 'Caldo de cana', icon: CupSoda, color: 'text-lime-300', active: true },
 ]
 
 const categoryAliases: Record<string, string[]> = {
@@ -103,6 +113,11 @@ const categoryAliases: Record<string, string[]> = {
   'salao-beleza-cs': ['salao de beleza', 'salao beleza', 'beleza'],
   academia: ['academia', 'roosters', 'atletica'],
   cfc: ['cfc', 'condutores', 'autoescola', 'auto escola'],
+  petshop: ['petshop', 'pet shop', 'keagro', 'ke agro'],
+  fotografia: ['fotografia', 'fotografo', 'bonani'],
+  'video-maker': ['video maker', 'videomaker', 'filmagem'],
+  trufaia: ['trufaia', 'trufa'],
+  'caldo-de-cana': ['caldo de cana', 'caldo cana'],
 }
 
 type PublicPartner = {
@@ -126,19 +141,19 @@ type PublicPartner = {
 }
 
 const fallbackPartners: PublicPartner[] = [
-  { id: 'fp-1', name: 'Manicure', category: 'Manicure', phone: '19 99986 6909', address: '', city: 'Cidade Universitária', region: 'UNASP', status: 'ATIVO', showOnMap: false, discount: '10%' },
-  { id: 'fp-2', name: 'Eletricista', category: 'Eletricista', phone: '19 99317 9673', address: '', city: 'Engenheiro Coelho', region: 'UNASP', status: 'ATIVO', showOnMap: false, discount: '10%' },
+  { id: 'fp-1', name: 'DS Nails Secrets', category: 'Manicure', phone: '19 99986 6909', address: '', city: 'Cidade Universitária', region: 'UNASP', status: 'ATIVO', showOnMap: false, discount: '10%' },
+  { id: 'fp-2', name: 'JM Elétrica', category: 'Eletricista', phone: '19 99317 9673', address: '', city: 'Engenheiro Coelho', region: 'UNASP', status: 'ATIVO', showOnMap: false, discount: '10%' },
   // ponytail: telefone igual ao do registro no banco (prt-4) de propósito — é a chave do
   // mergePartnersWithFallback. Sem ela vira card duplicado e o endereço novo não sobrescreve o antigo.
   { id: 'fp-5', name: "Panato's Restaurante LTDA", category: 'Restaurante', phone: '19 99645 3980', address: 'Rua Um, Engenheiro Coelho - SP, 13165-000', city: 'Engenheiro Coelho', region: 'UNASP', status: 'ATIVO', showOnMap: true, mapQuery: 'Rua Um, Engenheiro Coelho - SP, 13165-000', discount: '7%' },
   // ponytail: mapQuery sem "sala 51" — o número da sala derruba o pin do Google Maps.
   { id: 'fp-6', name: 'Nova Ótica Vitaliz', category: 'Ótica', phone: '19 99782 6744', address: 'Rua 7 de Setembro, 381, sala 51, Centro', city: 'Engenheiro Coelho', region: 'UNASP', status: 'ATIVO', showOnMap: true, mapQuery: 'Rua 7 de Setembro, 381, Engenheiro Coelho', discount: '5% a 20%', note: 'Descontos especiais formalizados:\n5% — apenas armação OU apenas lente.\n10% — na compra de lente + armações de grife.\n20% — na compra de lente + armação da nossa marca própria Vitaliz.\nExame de vista GRATUITO com profissional qualificada, com atendimento de qualidade e cuidado com a sua visão.' },
   { id: 'fp-7', name: 'Lava rápido Nick', category: 'Lavacar', phone: '19 99844 0616', address: 'Rua1 N: 76 bairro Recanto Portinari (Conhecido como rua João Cardoso Filho N:76)', city: 'Artur Nogueira', region: 'UNASP', status: 'ATIVO', showOnMap: true, mapQuery: 'Rua João Cardoso Filho, 76, Artur Nogueira', discount: '5%' },
-  { id: 'fp-8', name: 'Unigas tele entrega', category: 'Gás', phone: '19 99171 8015', address: 'Rua Hosana Cristina de Souza, 267, Bairro Universitário', city: 'Engenheiro Coelho', region: 'UNASP', status: 'ATIVO', showOnMap: true, discount: '4%' },
+  { id: 'fp-8', name: 'Unigás E.C', category: 'Gás', phone: '19 99171 8015', address: 'Rua Hosana Cristina de Souza, 267, Bairro Universitário', city: 'Engenheiro Coelho', region: 'UNASP', status: 'ATIVO', showOnMap: true, discount: '4%' },
   { id: 'fp-10', name: 'Supermercado Guidotti', category: 'Mercado', phone: '', address: 'Rua Celina Cavalheiro Francischetti, 319, Jardim Luiz Favero', city: 'Engenheiro Coelho', region: 'UNASP', status: 'ATIVO', showOnMap: true, note: 'Observação: você já está cadastrado e os descontos são automáticos no caixa do mercado, não havendo necessidade de identificação.', flyer: '/IMG/guidotti-descontos-rotativos.jpg' },
-  { id: 'fp-10b', name: 'Hortifruti', category: 'Hortifruti', phone: '19 99954 5292', address: '', city: 'Engenheiro Coelho', region: 'UNASP', status: 'ATIVO', showOnMap: false, discount: '10%' },
-  { id: 'fp-11', name: 'Odontologia', category: 'Consultório Odontológico', phone: '11 97530 2618', address: 'Rua Minas Gerais, 254, Jardim Amalia', city: 'Engenheiro Coelho', region: 'UNASP', status: 'ATIVO', showOnMap: true, discount: '10% à vista e 5% no crédito' },
-  { id: 'fp-12', name: 'Auto escola Lopes', category: 'CFC', phone: '19 98841 6068', address: 'Rua Antônio Batistela, 130, Jardim Brasil', city: 'Engenheiro Coelho', region: 'UNASP', status: 'ATIVO', showOnMap: true, discount: '5%' },
+  { id: 'fp-10b', name: 'Thalynson — O Menino da Horta', category: 'Hortifruti', phone: '19 99954 5292', address: '', city: 'Engenheiro Coelho', region: 'UNASP', status: 'ATIVO', showOnMap: false, discount: '10%' },
+  { id: 'fp-11', name: 'Brilha Odontologia', category: 'Consultório Odontológico', phone: '11 97530 2618', address: 'Rua Minas Gerais, 254, Jardim Amalia', city: 'Engenheiro Coelho', region: 'UNASP', status: 'ATIVO', showOnMap: true, discount: '10% à vista e 5% no crédito' },
+  { id: 'fp-12', name: 'Autoescola José Lopes', category: 'CFC', phone: '19 99958 3241', address: 'Rua Antônio Raphaelli, 575, Pq. das Indústrias', city: 'Engenheiro Coelho', region: 'UNASP', status: 'ATIVO', showOnMap: true, discount: '5%' },
   { id: 'fp-13', name: 'Farmácia', category: 'Farmácia', phone: '19 99714 2695', address: 'Rua Minas Gerais, 167, Jardim América', city: 'Engenheiro Coelho', region: 'UNASP', status: 'ATIVO', showOnMap: true, discount: 'De 5 a 15%' },
   { id: 'fp-14', name: 'Posto de combustível BR', category: 'Posto de combustível', phone: '19 97146 0709', address: 'Rua Amadeu Jorge Teresani, 230', city: 'Engenheiro Coelho', region: 'UNASP', status: 'ATIVO', showOnMap: true, discount: 'R$0,10/L' },
   { id: 'fp-15', name: 'Salão beleza', category: 'Salão de beleza', phone: '19 99921 7647', address: 'Rua Lery de Souza Duarte, 349', city: 'Engenheiro Coelho', region: 'UNASP', status: 'ATIVO', showOnMap: true, discount: '5 a 10%' },
@@ -146,95 +161,227 @@ const fallbackPartners: PublicPartner[] = [
   { id: 'fp-17', name: 'Motorista carro', category: 'Motorista', phone: '11 98224 5890', address: '', city: 'Engenheiro Coelho', region: 'UNASP', status: 'ATIVO', showOnMap: false, discount: '5%' },
   { id: 'fp-18', name: 'Sorveteria', category: 'Sorveteria', phone: '', address: 'Rua 7 de Setembro, 515', city: 'Engenheiro Coelho', region: 'UNASP', status: 'ATIVO', showOnMap: true },
   { id: 'fp-produtos-naturais', name: 'Produtos naturais', category: 'Produtos naturais', phone: '19 99120 8014', address: 'Rua Maria Simões de Andrade, 1768, esquina Rua Rui Barbosa, entrada principal cidade, Jardim Amaro', city: 'Artur Nogueira', region: 'UNASP', status: 'ATIVO', showOnMap: true, discount: '15%' },
-  { id: 'fp-espetinho-rotula', name: 'Espetinho da rótula', category: 'Espetinho', phone: '19 99608 9626', address: '', city: 'Engenheiro Coelho', region: 'UNASP', status: 'ATIVO', showOnMap: false, discount: '5%' },
+  { id: 'fp-espetinho-rotula', name: 'Espetinho da Rotatória', category: 'Espetinho', phone: '19 99608 9626', address: '', city: 'Engenheiro Coelho', region: 'UNASP', status: 'ATIVO', showOnMap: false, discount: '5%' },
   { id: 'fp-pinheiros-construtora', name: "Pinheiro's Construtora", category: 'Construtora', phone: '19 99834 3441', address: '', city: 'Engenheiro Coelho', region: 'UNASP', status: 'ATIVO', showOnMap: false, discount: '10% em projetos e 2,5% em construção/execução' },
   { id: 'fp-jhows-barbearia', name: "Jhow's Barbearia", category: 'Barbearia', phone: '15 99653 4206', address: '', city: 'Engenheiro Coelho', region: 'UNASP', status: 'ATIVO', showOnMap: false, discount: '5%' },
   { id: 'fp-roosters-academy', name: 'Roosters Academy', category: 'Academia', phone: '', address: '', city: 'Engenheiro Coelho', region: 'UNASP', status: 'ATIVO', showOnMap: false, comingSoon: true },
   { id: 'fp-salao-unasp', name: 'Salão de beleza do UNASP', category: 'Salão de beleza', phone: '15 99612 8875', address: '', city: 'Engenheiro Coelho', region: 'UNASP', status: 'ATIVO', showOnMap: false, discount: '5%' },
-  { id: 'fp-esfiharia', name: 'Esfiharia e Hamburgueria', category: 'Esfiharia e Hamburgueria', phone: '19 98142 8275', address: '', city: 'Engenheiro Coelho', region: 'UNASP', status: 'ATIVO', showOnMap: false, discount: '5%' },
+  { id: 'fp-esfiharia', name: 'Toka do Tio', category: 'Esfiharia e Hamburgueria', phone: '19 98142 8275', address: '', city: 'Engenheiro Coelho', region: 'UNASP', status: 'ATIVO', showOnMap: false, discount: '5%' },
+  { id: 'fp-keagro', name: 'Ke Agro Petshop', category: 'Petshop', phone: '19 99634 6512', address: 'Rua Antônio Rosa Silva Filho, Lagoa Bonita', city: 'Engenheiro Coelho', region: 'UNASP', status: 'ATIVO', showOnMap: true, mapQuery: 'Keagro Pet Shop e Banho e Tosa, Rua Antônio Rosa Silva Filho, Lagoa Bonita, Engenheiro Coelho - SP', discount: '7%', flyer: '/IMG/keagro-petshop-criativo.jpeg' },
+  { id: 'fp-bonani', name: 'Adriano Bonani Fotografia', category: 'Fotografia', phone: '19 99702 0908', address: '', city: 'Engenheiro Coelho', region: 'UNASP', status: 'ATIVO', showOnMap: false, discount: '10%' },
+  { id: 'fp-video-maker', name: 'Vídeo maker', category: 'Vídeo maker', phone: '19 99651 6358', address: '', city: 'Engenheiro Coelho', region: 'UNASP', status: 'ATIVO', showOnMap: false, discount: '10%', note: 'Cobertura de eventos, entrevistas, filmagens, vídeos institucionais e propaganda.' },
+  { id: 'fp-trufaia', name: 'Trufaia', category: 'Trufas', phone: '19 98135 5054', address: '', city: 'Engenheiro Coelho', region: 'UNASP', status: 'ATIVO', showOnMap: false, discount: '13,33% no app (R$ 1,30 a trufa)' },
+  // ponytail: a arte do Caldo de Cana não traz telefone — o card sai sem botão de contato,
+  // igual à Sorveteria. Assim que o Samuel mandar o número, é só preencher `phone`.
+  { id: 'fp-caldo-cana', name: 'Caldo de Cana do Marcos', category: 'Caldo de cana', phone: '', address: '', city: 'Engenheiro Coelho', region: 'UNASP', status: 'ATIVO', showOnMap: false, discount: '5%' },
 ]
 
-const offers = [
+// `oldPrice` é opcional de propósito: só entra onde existe um "de/por" real.
+// Riscar um texto que não é preço (era o caso antes) só polui o card.
+type Offer = {
+  title: string
+  tag: string
+  oldPrice?: string
+  price: string
+  badge: string
+  badgeClass: string
+  image: string
+}
+
+const offers: Offer[] = [
   {
-    title: 'Farmácia Popular',
-    tag: 'Farmácia',
-    oldPrice: 'Entrega no UNASP',
-    price: 'Peça pelo WhatsApp',
-    badge: 'NOVO',
-    badgeClass: 'bg-error text-white',
-    image: '/IMG/farmacia-popular-unasp.png',
-  },
-  {
-    title: 'Produtos Naturais Canto Verde',
-    tag: 'Produtos naturais',
-    oldPrice: 'Preços baixos',
-    price: '15% de desconto',
-    badge: '15% OFF',
-    badgeClass: 'bg-primary text-on-primary',
-    image: '/IMG/produtos-naturais-canto-verde.jpeg',
-  },
-  {
-    title: 'UniGas Euplus',
-    tag: 'Gás',
-    oldPrice: 'Condição padrão',
-    price: 'Preço especial',
-    badge: 'CLIENTE EUPLUS',
-    badgeClass: 'bg-primary text-on-primary',
-    image: '/IMG/unigas-euplus.png',
-  },
-  {
-    title: 'Nick Lava Rápido',
-    tag: 'Lavacar',
-    oldPrice: 'Condição padrão',
-    price: 'Preços diferenciados',
-    badge: 'ASSINANTES',
+    title: 'Ke Agro Petshop',
+    tag: 'Petshop',
+    price: '7% de desconto',
+    badge: '7% OFF',
     badgeClass: 'bg-secondary text-on-secondary',
-    image: '/IMG/nick-lava-rapido-euplus.jpeg',
+    image: '/IMG/keagro-petshop.jpeg',
   },
   {
-    title: 'Nova Ótica Vitaliz',
-    tag: 'Ótica',
-    oldPrice: 'Preço de tabela',
-    price: 'Associados pagam menos',
-    badge: 'CLIENTE EUPLUS',
+    title: 'Adriano Bonani Fotografia',
+    tag: 'Fotografia',
+    price: '10% de desconto',
+    badge: '10% OFF',
+    badgeClass: 'bg-primary text-on-primary',
+    image: '/IMG/adriano-bonani-fotografia.jpeg',
+  },
+  {
+    title: 'Trufaia',
+    tag: 'Trufas',
+    oldPrice: 'R$ 1,50 por trufa',
+    price: 'R$ 1,30 no app',
+    badge: '13,33% OFF',
     badgeClass: 'bg-tertiary text-on-tertiary',
-    image: '/IMG/vitaliz-euplus.jpg',
+    image: '/IMG/trufaia.jpeg',
   },
   {
-    title: 'Mercado Guidotti',
-    tag: 'Mercado',
-    oldPrice: 'Região de Eng. Coelho',
-    price: 'Os melhores preços',
-    badge: 'CLIENTE EUPLUS',
-    badgeClass: 'bg-secondary text-on-secondary',
-    image: '/IMG/guidotti-melhores-precos.jpg',
-  },
-  {
-    title: 'Esfiharia e Hamburgueria',
-    tag: 'Toka do Tio Food Service',
-    oldPrice: 'Preço normal',
+    title: 'Caldo de Cana do Marcos',
+    tag: 'Caldo de cana',
     price: '5% de desconto',
     badge: '5% OFF',
+    badgeClass: 'bg-secondary text-on-secondary',
+    image: '/IMG/caldo-de-cana-marcos.jpeg',
+  },
+  {
+    title: 'JM Elétrica',
+    tag: 'Eletricista',
+    price: '10% de desconto',
+    badge: '10% OFF',
     badgeClass: 'bg-primary text-on-primary',
-    image: '/IMG/toka-do-tio.jpg',
+    image: '/IMG/jm-eletrica.jpeg',
+  },
+  {
+    title: 'Thalynson — O Menino da Horta',
+    tag: 'Hortifruti',
+    price: '10% de desconto',
+    badge: '10% OFF',
+    badgeClass: 'bg-secondary text-on-secondary',
+    image: '/IMG/thalynson-hortifruti.jpeg',
+  },
+  {
+    title: 'DS Nails Secrets',
+    tag: 'Manicure',
+    price: '10% de desconto',
+    badge: '10% OFF',
+    badgeClass: 'bg-primary text-on-primary',
+    image: '/IMG/ds-nails-secrets.jpeg',
+  },
+  {
+    title: 'Brilha Odontologia',
+    tag: 'Consultório Odontológico',
+    price: '10% à vista · 5% no crédito',
+    badge: '10% OFF',
+    badgeClass: 'bg-tertiary text-on-tertiary',
+    image: '/IMG/brilha-odontologia.jpeg',
+  },
+  {
+    title: 'Autoescola José Lopes',
+    tag: 'CFC',
+    price: '5% de desconto',
+    badge: '5% OFF',
+    badgeClass: 'bg-secondary text-on-secondary',
+    image: '/IMG/autoescola-jose-lopes.jpeg',
+  },
+  {
+    title: 'Unigás E.C',
+    tag: 'Gás',
+    price: '4% de desconto',
+    badge: '4% OFF',
+    badgeClass: 'bg-primary text-on-primary',
+    image: '/IMG/unigas-ec.jpeg',
+  },
+  {
+    title: 'Espetinho da Rotatória',
+    tag: 'Espetinho',
+    price: '5% de desconto',
+    badge: '5% OFF',
+    badgeClass: 'bg-secondary text-on-secondary',
+    image: '/IMG/espetinho-da-rotatoria.jpeg',
+  },
+  {
+    title: "Panato's Restaurante",
+    tag: 'Restaurante',
+    price: '7% de desconto',
+    badge: '7% OFF',
+    badgeClass: 'bg-primary text-on-primary',
+    image: '/IMG/panatos-restaurante.jpeg',
   },
   {
     title: "Jhow's Barbearia",
     tag: 'Barbearia',
-    oldPrice: 'Preço normal',
     price: '5% a menos por corte',
     badge: '5% OFF',
-    badgeClass: 'bg-primary text-on-primary',
-    image: '/IMG/jhows-barbearia.jpg',
+    badgeClass: 'bg-secondary text-on-secondary',
+    image: '/IMG/jhows-barbearia-euplus.jpeg',
   },
   {
-    title: 'SCbeauty Studio',
-    tag: 'Salão de beleza',
-    oldPrice: 'Preço normal',
+    title: 'Nick Lava Rápido',
+    tag: 'Lavacar',
     price: '5% de desconto',
     badge: '5% OFF',
     badgeClass: 'bg-primary text-on-primary',
-    image: '/IMG/scbeauty-studio.jpg',
+    image: '/IMG/nick-lava-rapido.jpeg',
+  },
+  {
+    title: 'Empório Canto Verde',
+    tag: 'Produtos naturais',
+    price: '15% de desconto',
+    badge: '15% OFF',
+    badgeClass: 'bg-tertiary text-on-tertiary',
+    image: '/IMG/emporio-canto-verde.jpeg',
+  },
+  {
+    title: "Pinheiro's Construtora",
+    tag: 'Construtora',
+    price: '10% em projetos · 2,5% na execução',
+    badge: '10% OFF',
+    badgeClass: 'bg-secondary text-on-secondary',
+    image: '/IMG/pinheiros-construtora.jpeg',
+  },
+  {
+    title: 'Toka do Tio',
+    tag: 'Esfiharia e Hamburgueria',
+    price: '5% de desconto',
+    badge: '5% OFF',
+    badgeClass: 'bg-primary text-on-primary',
+    image: '/IMG/toka-do-tio-euplus.jpeg',
+  },
+  {
+    title: 'Posto BR',
+    tag: 'Posto de combustível',
+    price: 'R$ 0,10 por litro',
+    badge: 'ASSINANTES',
+    badgeClass: 'bg-secondary text-on-secondary',
+    image: '/IMG/posto-br.jpeg',
+  },
+  {
+    title: 'Nova Ótica VitaLiz',
+    tag: 'Ótica',
+    price: 'Até 20% de desconto',
+    badge: 'CLIENTE EUPLUS',
+    badgeClass: 'bg-tertiary text-on-tertiary',
+    image: '/IMG/nova-otica-vitaliz.jpeg',
+  },
+  {
+    title: 'TC Beauty Studio',
+    tag: 'Salão de beleza',
+    price: '5% de desconto',
+    badge: '5% OFF',
+    badgeClass: 'bg-primary text-on-primary',
+    image: '/IMG/tc-beauty-studio.jpeg',
+  },
+  {
+    title: 'Mercado Guidotti',
+    tag: 'Mercado',
+    price: 'Descontos automáticos no caixa',
+    badge: 'CLIENTE EUPLUS',
+    badgeClass: 'bg-secondary text-on-secondary',
+    image: '/IMG/mercado-guidotti-euplus.jpeg',
+  },
+  {
+    title: 'ODS-7 Cosméticos',
+    tag: 'Cosméticos',
+    price: 'Descontos exclusivos',
+    badge: 'PARCEIRO',
+    badgeClass: 'bg-primary text-on-primary',
+    image: '/IMG/ods7-cosmeticos.jpeg',
+  },
+  {
+    title: 'Assine a Euplus',
+    tag: 'Preço de lançamento',
+    oldPrice: 'De R$ 29,90 por mês',
+    price: 'R$ 14,90/mês ou R$ 99,90',
+    badge: 'LANÇAMENTO',
+    badgeClass: 'bg-error text-white',
+    image: '/IMG/euplus-plano-lancamento.jpeg',
+  },
+  {
+    title: 'Faça parte da Euplus',
+    tag: 'Meta de 599 inscritos',
+    price: 'Concorra a R$ 999 a cada 4 meses',
+    badge: 'META 599',
+    badgeClass: 'bg-error text-white',
+    image: '/IMG/euplus-meta-599.jpeg',
   },
 ]
 
@@ -1205,48 +1352,6 @@ function PartnerSection() {
           </>
         ) : null}
 
-        {primaryPartner?.flyer ? (
-          <>
-            <Reveal from="up" className="mt-12 overflow-hidden rounded-3xl border border-white/10 bg-surface-container-low shadow-2xl">
-              <button type="button" onClick={() => flyerDialogRef.current?.showModal()} className="block w-full">
-                <img
-                  src={primaryPartner.flyer}
-                  alt={`Encarte de ofertas do ${primaryPartner.name}`}
-                  className="w-full"
-                />
-              </button>
-              <p className="px-4 py-3 text-center text-xs text-outline">
-                Toque para ampliar · Descontos rotativos e automáticos, toda semana e fim de semana
-              </p>
-            </Reveal>
-
-            {/* <dialog> nativo: Esc para fechar e focus trap sem código extra */}
-            <dialog
-              ref={flyerDialogRef}
-              onClick={(event) => {
-                if (event.target === flyerDialogRef.current) flyerDialogRef.current.close()
-              }}
-              className="relative max-w-none bg-transparent p-0 backdrop:bg-black/85"
-            >
-              <button
-                type="button"
-                onClick={() => flyerDialogRef.current?.close()}
-                aria-label="Fechar encarte"
-                className="absolute right-3 top-3 z-10 flex h-11 w-11 items-center justify-center rounded-full bg-black/75 text-white ring-1 ring-white/25 transition hover:bg-black"
-              >
-                <X className="h-5 w-5" />
-              </button>
-              <div className="max-h-[92vh] max-w-[96vw] overflow-auto rounded-2xl">
-                <img
-                  src={primaryPartner.flyer}
-                  alt={`Encarte de ofertas do ${primaryPartner.name}`}
-                  className="block max-w-none"
-                />
-              </div>
-            </dialog>
-          </>
-        ) : null}
-
         {visibleCategories.length && visibleRegions.length && canShowPrimaryMap ? (
           <Reveal
             from="up"
@@ -1277,6 +1382,47 @@ function PartnerSection() {
               </a>
             </div>
           </Reveal>
+        ) : null}
+
+        {/* Encarte/criativo fica DEPOIS do mapa: pedido do parceiro ("criativo abaixo do GPS"). */}
+        {primaryPartner?.flyer ? (
+          <>
+            <Reveal from="up" className="mt-8 overflow-hidden rounded-3xl border border-white/10 bg-surface-container-low shadow-2xl">
+              <button type="button" onClick={() => flyerDialogRef.current?.showModal()} className="block w-full">
+                <img
+                  src={primaryPartner.flyer}
+                  alt={`Encarte de ofertas do ${primaryPartner.name}`}
+                  className="w-full"
+                />
+              </button>
+              <p className="px-4 py-3 text-center text-xs text-outline">Toque para ampliar</p>
+            </Reveal>
+
+            {/* <dialog> nativo: Esc para fechar e focus trap sem código extra */}
+            <dialog
+              ref={flyerDialogRef}
+              onClick={(event) => {
+                if (event.target === flyerDialogRef.current) flyerDialogRef.current.close()
+              }}
+              className="relative max-w-none bg-transparent p-0 backdrop:bg-black/85"
+            >
+              <button
+                type="button"
+                onClick={() => flyerDialogRef.current?.close()}
+                aria-label="Fechar encarte"
+                className="absolute right-3 top-3 z-10 flex h-11 w-11 items-center justify-center rounded-full bg-black/75 text-white ring-1 ring-white/25 transition hover:bg-black"
+              >
+                <X className="h-5 w-5" />
+              </button>
+              <div className="max-h-[92vh] max-w-[96vw] overflow-auto rounded-2xl">
+                <img
+                  src={primaryPartner.flyer}
+                  alt={`Encarte de ofertas do ${primaryPartner.name}`}
+                  className="block max-w-none"
+                />
+              </div>
+            </dialog>
+          </>
         ) : null}
 
         {visibleCategories.length && visibleRegions.length && primaryPartner && !canShowPrimaryMap ? (
@@ -1520,15 +1666,15 @@ function RegistrationSection({
             <div className="space-y-4">
               <h2 className="font-headline text-3xl font-bold sm:text-4xl md:text-5xl">Inicie sua Jornada</h2>
               <p className="whitespace-pre-line text-base leading-relaxed text-on-surface-variant sm:text-lg">
-                {`Após preencher seus dados, clique em 'Finalizar Cadastro' e realize o pagamento do seu crédito via Pix: 000.656.660-03 (Samuel Pedroso Souza).
-Valor do crédito: R$ 99,00 em até duas vezes de R$ 49,50 e não paga + nada.
+                {`Após preencher o cadastro, clique em 'Finalizar Cadastro' e realize o pagamento via Pix: 67.135.611/0001-18 (Obe Daniel Silemcieux).
 
-Pagamento confirmado, em até 24 horas já poderá usá-lo no comércio cadastrado.
+Parcelado em 12x de R$ 14,90 ou à vista por R$ 99,90.
+
+Pagamento confirmado, em até 4 horas já poderá usar a plataforma no comércio cadastrado.
 
 Dúvidas? Entre em contato:
-19 98135-5054 (Daniel)
-83 99196-3834 (Ardesson)
-55 92001-9740 (Samuel)`}
+19 98135-5054 (Obe Daniel)
+19 98224-6821 (Clarisse)`}
               </p>
             </div>
 
@@ -1746,7 +1892,9 @@ function OfferSection() {
                 <h3 className="mb-4 font-headline text-xl font-bold text-on-surface">{offer.title}</h3>
                 <div className="flex items-center justify-between gap-3">
                   <div className="min-w-0">
-                    <p className="text-xs text-outline line-through">{offer.oldPrice}</p>
+                    {offer.oldPrice ? (
+                      <p className="text-xs text-outline line-through">{offer.oldPrice}</p>
+                    ) : null}
                     <p className="text-2xl font-black leading-tight text-secondary">{offer.price}</p>
                   </div>
                   <button
@@ -1857,7 +2005,7 @@ function WelcomePage() {
       <div className="mx-auto max-w-2xl rounded-3xl border border-white/10 bg-surface-container p-8 text-center shadow-2xl shadow-black/25 sm:p-12">
         <h1 className="font-headline text-4xl font-bold text-white sm:text-5xl">Aí sim!</h1>
         <p className="mt-4 text-lg leading-relaxed text-on-surface-variant">
-          Cadastro concluído com sucesso. Em até 24 horas você pode já utilizar seu de benefícios.
+          Cadastro concluído com sucesso. Em até 4 horas você já pode utilizar seus benefícios.
         </p>
       </div>
     </div>
