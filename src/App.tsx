@@ -171,9 +171,7 @@ const fallbackPartners: PublicPartner[] = [
   { id: 'fp-bonani', name: 'Adriano Bonani Fotografia', category: 'Fotografia', phone: '19 99702 0908', address: '', city: 'Engenheiro Coelho', region: 'UNASP', status: 'ATIVO', showOnMap: false, discount: '10%' },
   { id: 'fp-video-maker', name: 'Vídeo maker', category: 'Vídeo maker', phone: '19 99651 6358', address: '', city: 'Engenheiro Coelho', region: 'UNASP', status: 'ATIVO', showOnMap: false, discount: '10%', note: 'Cobertura de eventos, entrevistas, filmagens, vídeos institucionais e propaganda.' },
   { id: 'fp-trufaia', name: 'Trufaia', category: 'Trufas', phone: '19 98135 5054', address: '', city: 'Engenheiro Coelho', region: 'UNASP', status: 'ATIVO', showOnMap: false, discount: '13,33% no app (R$ 1,30 a trufa)' },
-  // ponytail: a arte do Caldo de Cana não traz telefone — o card sai sem botão de contato,
-  // igual à Sorveteria. Assim que o Samuel mandar o número, é só preencher `phone`.
-  { id: 'fp-caldo-cana', name: 'Caldo de Cana do Marcos', category: 'Caldo de cana', phone: '', address: '', city: 'Engenheiro Coelho', region: 'UNASP', status: 'ATIVO', showOnMap: false, discount: '5%' },
+  { id: 'fp-caldo-cana', name: 'Caldo de Cana do Marcos', category: 'Caldo de cana', phone: '19 98849 1797', address: '', city: 'Engenheiro Coelho', region: 'UNASP', status: 'ATIVO', showOnMap: false, discount: '5%' },
 ]
 
 // `oldPrice` é opcional de propósito: só entra onde existe um "de/por" real.
@@ -1666,15 +1664,16 @@ function RegistrationSection({
             <div className="space-y-4">
               <h2 className="font-headline text-3xl font-bold sm:text-4xl md:text-5xl">Inicie sua Jornada</h2>
               <p className="whitespace-pre-line text-base leading-relaxed text-on-surface-variant sm:text-lg">
-                {`Após preencher o cadastro, clique em 'Finalizar Cadastro' e realize o pagamento via Pix: 67.135.611/0001-18 (Obe Daniel Silemcieux).
+                {`Após preencher o cadastro, clique em 'Finalizar Cadastro' e realize o pagamento.
 
-Parcelado em 12x de R$ 14,90 ou à vista por R$ 99,90.
+Via Pix: 67.135.611/0001-18 (Obe Daniel Silemcieux). Envie o comprovante para um destes contatos:
 
-Pagamento confirmado, em até 4 horas já poderá usar a plataforma no comércio cadastrado.
+Obe Daniel — 19 98135-5054
+Clarisse — 19 98224-6821
 
-Dúvidas? Entre em contato:
-19 98135-5054 (Obe Daniel)
-19 98224-6821 (Clarisse)`}
+Parcelado em 12x de R$ 14,90 · à vista R$ 99,90
+
+Pagamento confirmado, em até 4 horas já poderá usar a plataforma no comércio cadastrado.`}
               </p>
             </div>
 
