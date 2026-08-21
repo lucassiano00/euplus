@@ -107,6 +107,7 @@ const partnerCategories: PartnerCategory[] = [
   { id: 'mercado-universitario', label: 'Novo mercado no universitário', icon: Store, color: 'text-lime-300', active: true },
   { id: 'entrega-ovos', label: 'Entrega de ovos', icon: Egg, color: 'text-amber-300', active: true },
   { id: 'materiais-construcao', label: 'Materiais de construção', icon: Hammer, color: 'text-stone-300', active: true },
+  { id: 'sucos', label: 'Sucos para eventos', icon: CupSoda, color: 'text-orange-300', active: true },
 ]
 
 const categoryAliases: Record<string, string[]> = {
@@ -145,6 +146,7 @@ const categoryAliases: Record<string, string[]> = {
   'mercado-universitario': ['novo mercado no universitario'],
   'entrega-ovos': ['entrega de ovos'],
   'materiais-construcao': ['materiais de construcao'],
+  sucos: ['sucos para eventos', 'gold sucos'],
 }
 
 type PublicPartner = {
@@ -186,7 +188,7 @@ const fallbackPartners: PublicPartner[] = [
   { id: 'fp-15', name: 'Salão de beleza', category: 'Salão de beleza', phone: '19 99921 7647', address: 'Rua Lery de Souza Duarte, 349', city: 'Engenheiro Coelho', region: 'UNASP', status: 'ATIVO', showOnMap: true, discount: '5 a 10%', note: 'Unhas e sobrancelhas.' },
   { id: 'fp-16', name: 'Moto táxi', category: 'Motorista', phone: '19 99968 0621', address: '', city: 'Engenheiro Coelho', region: 'UNASP', status: 'ATIVO', showOnMap: false, discount: '5%' },
   { id: 'fp-17', name: 'Motorista carro', category: 'Motorista', phone: '11 98224 5890', address: '', city: 'Engenheiro Coelho', region: 'UNASP', status: 'ATIVO', showOnMap: false, discount: '5%' },
-  { id: 'fp-18', name: 'Sorveteria', category: 'Sorveteria', phone: '', address: 'Rua 7 de Setembro, 515', city: 'Engenheiro Coelho', region: 'UNASP', status: 'ATIVO', showOnMap: true },
+  { id: 'fp-18', name: 'Sorveteria', category: 'Sorveteria', phone: '', address: '', city: 'Engenheiro Coelho', region: 'UNASP', status: 'ATIVO', showOnMap: false, comingSoon: true },
   { id: 'fp-produtos-naturais', name: 'Produtos naturais', category: 'Produtos naturais', phone: '19 99120 8014', address: 'Rua Maria Simões de Andrade, 1768, esquina Rua Rui Barbosa, entrada principal cidade, Jardim Amaro', city: 'Artur Nogueira', region: 'UNASP', status: 'ATIVO', showOnMap: true, discount: '15%' },
   { id: 'fp-espetinho-rotula', name: 'Espetinho da Rotatória', category: 'Espetinho', phone: '19 99608 9626', address: '', city: 'Engenheiro Coelho', region: 'UNASP', status: 'ATIVO', showOnMap: false, discount: '5%' },
   { id: 'fp-pinheiros-construtora', name: "Pinheiro's Construtora", category: 'Construtora', phone: '19 99834 3441', address: '', city: 'Engenheiro Coelho', region: 'UNASP', status: 'ATIVO', showOnMap: false, discount: '10% em projetos e 2,5% em construção/execução' },
@@ -198,6 +200,7 @@ const fallbackPartners: PublicPartner[] = [
   { id: 'fp-bonani', name: 'Adriano Bonani Fotografia', category: 'Fotografia', phone: '19 99702 0908', address: '', city: 'Engenheiro Coelho', region: 'UNASP', status: 'ATIVO', showOnMap: false, discount: '10%' },
   { id: 'fp-video-maker', name: 'Vídeo maker', category: 'Vídeo maker', phone: '19 99651 6358', address: '', city: 'Engenheiro Coelho', region: 'UNASP', status: 'ATIVO', showOnMap: false, discount: '10%', note: 'Cobertura de eventos, entrevistas, filmagens, vídeos institucionais e propaganda.' },
   { id: 'fp-trufaia', name: 'Trufaia', category: 'Trufas', phone: '19 98135 5054', address: '', city: 'Engenheiro Coelho', region: 'UNASP', status: 'ATIVO', showOnMap: false, discount: '13,33% no app (R$ 1,30 a trufa)' },
+  { id: 'fp-gold-sucos', name: 'Gold Sucos', category: 'Sucos para eventos', phone: '19 99809 5753', address: '', city: 'Engenheiro Coelho', region: 'UNASP', status: 'ATIVO', showOnMap: false },
   { id: 'fp-simone', name: 'Simone Variedades', category: 'Variedades', phone: '19 98307 4058', address: 'Rua Arlindo Ferreira de Camargo', city: 'Cidade Universitária', region: 'UNASP', status: 'ATIVO', showOnMap: false, discount: '5 a 10%' },
   { id: 'fp-aej-impulse', name: 'A&J Impulse', category: 'Social mídia', phone: '19 99865 4794', address: '', city: 'Cidade Universitária', region: 'UNASP', status: 'ATIVO', showOnMap: false, discount: '15% em edição de vídeos' },
   // ponytail: a arte so traz e-mail, sem telefone — o card sai sem botao de conversar.
@@ -225,6 +228,71 @@ type Offer = {
 }
 
 const offers: Offer[] = [
+  {
+    title: 'Drogaria Total Popular',
+    tag: 'Farmácia',
+    price: 'De 5% a 15% · entrega no UNASP',
+    badge: 'ATÉ 15% OFF',
+    badgeClass: 'bg-error text-white',
+    image: '/IMG/drogaria-total-popular.jpg',
+  },
+  {
+    title: 'Aluguel de bike elétrica',
+    tag: 'Mobilidade',
+    oldPrice: 'Diária R$ 50,00',
+    price: 'R$ 40,00 com o app',
+    badge: '10% OFF',
+    badgeClass: 'bg-tertiary text-on-tertiary',
+    image: '/IMG/bike-eletrica.jpg',
+  },
+  {
+    title: 'A&J Impulse',
+    tag: 'Social mídia',
+    price: '15% em edição de vídeos',
+    badge: '15% OFF',
+    badgeClass: 'bg-primary text-on-primary',
+    image: '/IMG/aej-impulse.jpg',
+  },
+  {
+    title: 'Samuel Augusto — Psicanalista',
+    tag: 'Saúde mental',
+    price: '10% de desconto',
+    badge: '10% OFF',
+    badgeClass: 'bg-secondary text-on-secondary',
+    image: '/IMG/samuel-augusto-psicanalista.jpg',
+  },
+  {
+    title: 'Dogão de Rua',
+    tag: 'Cachorro-quente',
+    price: '5% de desconto',
+    badge: '5% OFF',
+    badgeClass: 'bg-primary text-on-primary',
+    image: '/IMG/dogao-de-rua.jpg',
+  },
+  {
+    title: 'Mel do Marcos',
+    tag: 'Mel',
+    price: '5% de desconto',
+    badge: '5% OFF',
+    badgeClass: 'bg-tertiary text-on-tertiary',
+    image: '/IMG/mel-do-marcos.jpg',
+  },
+  {
+    title: 'Simone Variedades',
+    tag: 'Variedades',
+    price: '5% a 10% de desconto',
+    badge: 'ATÉ 10% OFF',
+    badgeClass: 'bg-secondary text-on-secondary',
+    image: '/IMG/simone-variedades.jpg',
+  },
+  {
+    title: 'Gold Sucos',
+    tag: 'Sucos para eventos',
+    price: 'Condição para assinantes',
+    badge: 'PARCEIRO',
+    badgeClass: 'bg-primary text-on-primary',
+    image: '/IMG/gold-sucos.jpg',
+  },
   {
     title: 'Ke Agro Petshop',
     tag: 'Petshop',
@@ -410,6 +478,14 @@ const offers: Offer[] = [
     badge: 'META 599',
     badgeClass: 'bg-error text-white',
     image: '/IMG/euplus-meta-599.jpeg',
+  },
+  {
+    title: 'Drogaria Total Popular',
+    tag: 'Farmácia',
+    price: 'De 5% a 15% · entrega no UNASP',
+    badge: 'ATÉ 15% OFF',
+    badgeClass: 'bg-error text-white',
+    image: '/IMG/drogaria-total-popular.jpg',
   },
 ]
 
@@ -1928,7 +2004,7 @@ function OfferSection() {
         >
           {offers.map((offer, index) => (
             <div
-              key={offer.title}
+              key={`${offer.title}-${index}`}
               aria-label={`${index + 1} de ${offers.length}: ${offer.title}`}
               className="group relative min-w-full snap-start rounded-[1.5rem] border border-white/10 bg-surface-container p-3.5 sm:min-w-[calc(50%-0.625rem)] md:min-w-[calc(50%-0.75rem)] md:p-4 lg:min-w-[calc(33.333%-1rem)] xl:min-w-[calc(25%-1.125rem)]"
             >
@@ -1967,10 +2043,10 @@ function OfferSection() {
           ))}
         </div>
 
-        <div className="mt-6 flex items-center justify-center gap-2">
+        <div className="mt-6 flex flex-wrap items-center justify-center gap-2">
           {offers.map((offer, index) => (
             <button
-              key={`indicator-${offer.title}`}
+              key={`indicator-${offer.title}-${index}`}
               type="button"
               aria-label={`Ir para oferta ${offer.title}`}
               className={`h-2.5 rounded-full transition-all ${
