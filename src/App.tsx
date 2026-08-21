@@ -77,13 +77,13 @@ const partnerCategories: PartnerCategory[] = [
   { id: 'lavacar', label: 'Lavacar', icon: CarTaxiFront, color: 'text-cyan-300', active: true },
   { id: 'restaurante', label: 'Restaurante', icon: Utensils, color: 'text-tertiary', active: true },
   { id: 'posto-combustivel', label: 'Posto de combustível', icon: Fuel, color: 'text-secondary', active: true },
-  { id: 'sorveteria', label: 'Sorveteria', icon: Snowflake, color: 'text-sky-300', active: true },
+  { id: 'sorveteria', label: 'Sorveteria', icon: Snowflake, color: 'text-sky-300', active: true, comingSoon: true },
   { id: 'motorista', label: 'Motoristas', icon: Car, color: 'text-sky-300', active: true },
   { id: 'gas', label: 'Gás', icon: Flame, color: 'text-yellow-300', active: true },
   { id: 'salao-beleza-cs', label: 'Salão de beleza', icon: Sparkles, color: 'text-pink-300', active: true },
   { id: 'academia', label: 'Academia', icon: Dumbbell, color: 'text-orange-300', active: true },
   { id: 'construtora', label: 'Construtora', icon: Building2, color: 'text-stone-300', active: true },
-  { id: 'barbearia', label: 'Barbearia', icon: Scissors, color: 'text-violet-300', active: true },
+  { id: 'barbearia', label: 'Barbearia', icon: Scissors, color: 'text-violet-300', active: true, comingSoon: true },
   { id: 'cfc', label: 'CFC (Centro de Formação de Condutores)', icon: GraduationCap, color: 'text-amber-300', active: true },
   { id: 'mercado', label: 'Mercado', icon: ShoppingBasket, color: 'text-lime-300', active: true },
   { id: 'odontologia', label: 'Consultório Odontológico', icon: Stethoscope, color: 'text-cyan-300', active: true },
@@ -104,9 +104,9 @@ const partnerCategories: PartnerCategory[] = [
   { id: 'cachorro-quente', label: 'Cachorro-quente', icon: Beef, color: 'text-amber-300', active: true },
   { id: 'mel', label: 'Mel', icon: Droplet, color: 'text-yellow-300', active: true },
   { id: 'bike-eletrica', label: 'Aluguel de bike elétrica', icon: Bike, color: 'text-lime-300', active: true },
-  { id: 'mercado-universitario', label: 'Novo mercado no universitário', icon: Store, color: 'text-lime-300', active: true },
-  { id: 'entrega-ovos', label: 'Entrega de ovos', icon: Egg, color: 'text-amber-300', active: true },
-  { id: 'materiais-construcao', label: 'Materiais de construção', icon: Hammer, color: 'text-stone-300', active: true },
+  { id: 'mercado-universitario', label: 'Novo mercado no universitário', icon: Store, color: 'text-lime-300', active: true, comingSoon: true },
+  { id: 'entrega-ovos', label: 'Entrega de ovos', icon: Egg, color: 'text-amber-300', active: true, comingSoon: true },
+  { id: 'materiais-construcao', label: 'Materiais de construção', icon: Hammer, color: 'text-stone-300', active: true, comingSoon: true },
   { id: 'sucos', label: 'Sucos para eventos', icon: CupSoda, color: 'text-orange-300', active: true },
 ]
 
@@ -185,7 +185,7 @@ const fallbackPartners: PublicPartner[] = [
   { id: 'fp-12', name: 'Autoescola José Lopes', category: 'CFC', phone: '19 99958 3241', address: 'Rua Antônio Raphaelli, 575, Pq. das Indústrias', city: 'Engenheiro Coelho', region: 'UNASP', status: 'ATIVO', showOnMap: true, discount: '5%' },
   { id: 'fp-13', name: 'Drogaria Total Popular', category: 'Farmácia', phone: '19 99714 2695', address: 'Rua Minas Gerais, 167, Jardim América', city: 'Engenheiro Coelho', region: 'UNASP', status: 'ATIVO', showOnMap: true, discount: 'De 5 a 15%', note: 'Tele-entrega na região do UNASP, pedido mínimo de R$ 20,00.\nSegunda a quinta: 12:30 às 20:00 · Sexta: 12:30 às 17:00.' },
   { id: 'fp-14', name: 'Posto de combustível BR', category: 'Posto de combustível', phone: '19 97146 0709', address: 'Rua Amadeu Jorge Teresani, 230', city: 'Engenheiro Coelho', region: 'UNASP', status: 'ATIVO', showOnMap: true, discount: 'R$0,10/L' },
-  { id: 'fp-15', name: 'Salão de beleza', category: 'Salão de beleza', phone: '19 99921 7647', address: 'Rua Lery de Souza Duarte, 349', city: 'Engenheiro Coelho', region: 'UNASP', status: 'ATIVO', showOnMap: true, discount: '5 a 10%', note: 'Unhas e sobrancelhas.' },
+  { id: 'fp-15', name: 'Salão de beleza', category: 'Salão de beleza', phone: '19 99921 7647', address: 'Rua Lery de Souza Duarte, 349', city: 'Engenheiro Coelho', region: 'UNASP', status: 'ATIVO', showOnMap: true, discount: '5 a 10%', note: 'Corte de cabelo.' },
   { id: 'fp-16', name: 'Moto táxi', category: 'Motorista', phone: '19 99968 0621', address: '', city: 'Engenheiro Coelho', region: 'UNASP', status: 'ATIVO', showOnMap: false, discount: '5%' },
   { id: 'fp-17', name: 'Motorista carro', category: 'Motorista', phone: '11 98224 5890', address: '', city: 'Engenheiro Coelho', region: 'UNASP', status: 'ATIVO', showOnMap: false, discount: '5%' },
   { id: 'fp-18', name: 'Sorveteria', category: 'Sorveteria', phone: '', address: '', city: 'Engenheiro Coelho', region: 'UNASP', status: 'ATIVO', showOnMap: false, comingSoon: true },
@@ -194,7 +194,7 @@ const fallbackPartners: PublicPartner[] = [
   { id: 'fp-pinheiros-construtora', name: "Pinheiro's Construtora", category: 'Construtora', phone: '19 99834 3441', address: '', city: 'Engenheiro Coelho', region: 'UNASP', status: 'ATIVO', showOnMap: false, discount: '10% em projetos e 2,5% em construção/execução' },
   { id: 'fp-barbearia', name: 'Barbearia', category: 'Barbearia', phone: '', address: '', city: 'Engenheiro Coelho', region: 'UNASP', status: 'ATIVO', showOnMap: false, comingSoon: true },
   { id: 'fp-roosters-academy', name: 'Roosters Academy', category: 'Academia', phone: '', address: '', city: 'Engenheiro Coelho', region: 'UNASP', status: 'ATIVO', showOnMap: false, comingSoon: true },
-  { id: 'fp-salao-unasp', name: 'Salão de beleza do UNASP', category: 'Salão de beleza', phone: '15 99612 8875', address: '', city: 'Engenheiro Coelho', region: 'UNASP', status: 'ATIVO', showOnMap: false, discount: '5%' },
+  { id: 'fp-salao-unasp', name: 'Salão de beleza do UNASP', category: 'Salão de beleza', phone: '15 99612 8875', address: '', city: 'Engenheiro Coelho', region: 'UNASP', status: 'ATIVO', showOnMap: false, discount: '5%', note: 'Unhas e sobrancelhas.' },
   { id: 'fp-esfiharia', name: 'Toka do Tio', category: 'Esfiharia e Hamburgueria', phone: '19 98142 8275', address: '', city: 'Engenheiro Coelho', region: 'UNASP', status: 'ATIVO', showOnMap: false, discount: '5%' },
   { id: 'fp-keagro', name: 'Ke Agro Petshop', category: 'Petshop', phone: '19 99634 6512', address: 'Rua Antônio Rosa Silva Filho, Lagoa Bonita', city: 'Engenheiro Coelho', region: 'UNASP', status: 'ATIVO', showOnMap: true, mapQuery: 'Keagro Pet Shop e Banho e Tosa, Rua Antônio Rosa Silva Filho, Lagoa Bonita, Engenheiro Coelho - SP', discount: '7%', flyer: '/IMG/keagro-petshop-criativo.jpeg' },
   { id: 'fp-bonani', name: 'Adriano Bonani Fotografia', category: 'Fotografia', phone: '19 99702 0908', address: '', city: 'Engenheiro Coelho', region: 'UNASP', status: 'ATIVO', showOnMap: false, discount: '10%' },
@@ -1400,7 +1400,7 @@ function PartnerSection() {
                         ? 'border-lime-300/70 bg-lime-300/20 text-lime-200'
                         : 'border-yellow-400/40 bg-yellow-400/10 text-yellow-300'
                     }`}>
-                      {item.highlighted ? 'Em implantação' : 'Em julho'}
+                      {item.highlighted ? 'Em implantação' : 'Em breve'}
                     </span>
                   ) : null}
                   <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-surface-container-highest transition-transform group-hover:scale-110">
@@ -1449,7 +1449,7 @@ function PartnerSection() {
                         ? 'border-lime-300/70 bg-lime-300/20 text-lime-200'
                         : 'border-yellow-400/40 bg-yellow-400/10 text-yellow-300'
                     }`}>
-                      {item.highlighted ? 'Em implantação' : 'Em julho'}
+                      {item.highlighted ? 'Em implantação' : 'Em breve'}
                     </span>
                   ) : null}
                   <div className="flex h-16 w-16 items-center justify-center rounded-full bg-surface-container-highest transition-transform group-hover:scale-110">
