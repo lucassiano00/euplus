@@ -163,7 +163,7 @@ const fallbackPartners: PublicPartner[] = [
   { id: 'fp-produtos-naturais', name: 'Produtos naturais', category: 'Produtos naturais', phone: '19 99120 8014', address: 'Rua Maria Simões de Andrade, 1768, esquina Rua Rui Barbosa, entrada principal cidade, Jardim Amaro', city: 'Artur Nogueira', region: 'UNASP', status: 'ATIVO', showOnMap: true, discount: '15%' },
   { id: 'fp-espetinho-rotula', name: 'Espetinho da Rotatória', category: 'Espetinho', phone: '19 99608 9626', address: '', city: 'Engenheiro Coelho', region: 'UNASP', status: 'ATIVO', showOnMap: false, discount: '5%' },
   { id: 'fp-pinheiros-construtora', name: "Pinheiro's Construtora", category: 'Construtora', phone: '19 99834 3441', address: '', city: 'Engenheiro Coelho', region: 'UNASP', status: 'ATIVO', showOnMap: false, discount: '10% em projetos e 2,5% em construção/execução' },
-  { id: 'fp-jhows-barbearia', name: "Jhow's Barbearia", category: 'Barbearia', phone: '15 99653 4206', address: '', city: 'Engenheiro Coelho', region: 'UNASP', status: 'ATIVO', showOnMap: false, discount: '5%' },
+  { id: 'fp-barbearia', name: 'Barbearia', category: 'Barbearia', phone: '', address: '', city: 'Engenheiro Coelho', region: 'UNASP', status: 'ATIVO', showOnMap: false, comingSoon: true },
   { id: 'fp-roosters-academy', name: 'Roosters Academy', category: 'Academia', phone: '', address: '', city: 'Engenheiro Coelho', region: 'UNASP', status: 'ATIVO', showOnMap: false, comingSoon: true },
   { id: 'fp-salao-unasp', name: 'Salão de beleza do UNASP', category: 'Salão de beleza', phone: '15 99612 8875', address: '', city: 'Engenheiro Coelho', region: 'UNASP', status: 'ATIVO', showOnMap: false, discount: '5%' },
   { id: 'fp-esfiharia', name: 'Toka do Tio', category: 'Esfiharia e Hamburgueria', phone: '19 98142 8275', address: '', city: 'Engenheiro Coelho', region: 'UNASP', status: 'ATIVO', showOnMap: false, discount: '5%' },
@@ -283,14 +283,6 @@ const offers: Offer[] = [
     badge: '7% OFF',
     badgeClass: 'bg-primary text-on-primary',
     image: '/IMG/panatos-restaurante.jpeg',
-  },
-  {
-    title: "Jhow's Barbearia",
-    tag: 'Barbearia',
-    price: '5% a menos por corte',
-    badge: '5% OFF',
-    badgeClass: 'bg-secondary text-on-secondary',
-    image: '/IMG/jhows-barbearia-euplus.jpeg',
   },
   {
     title: 'Nick Lava Rápido',
