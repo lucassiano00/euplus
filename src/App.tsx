@@ -11,12 +11,21 @@ import {
   ChevronLeft,
   ChevronRight,
   CircleDollarSign,
+  Beef,
+  Bike,
+  Brain,
   Building2,
   Camera,
+  Clapperboard,
   Cookie,
   CupSoda,
+  Droplet,
   Dumbbell,
+  Egg,
+  Hammer,
   PawPrint,
+  ShoppingBag,
+  Store,
   Video,
   Sandwich,
   Snowflake,
@@ -89,6 +98,15 @@ const partnerCategories: PartnerCategory[] = [
   { id: 'video-maker', label: 'Vídeo maker', icon: Video, color: 'text-red-300', active: true },
   { id: 'trufaia', label: 'Trufas', icon: Cookie, color: 'text-amber-300', active: true },
   { id: 'caldo-de-cana', label: 'Caldo de cana', icon: CupSoda, color: 'text-lime-300', active: true },
+  { id: 'variedades', label: 'Variedades', icon: ShoppingBag, color: 'text-pink-300', active: true },
+  { id: 'social-midia', label: 'Social mídia', icon: Clapperboard, color: 'text-indigo-300', active: true },
+  { id: 'psicanalista', label: 'Psicanalista', icon: Brain, color: 'text-sky-300', active: true },
+  { id: 'cachorro-quente', label: 'Cachorro-quente', icon: Beef, color: 'text-amber-300', active: true },
+  { id: 'mel', label: 'Mel', icon: Droplet, color: 'text-yellow-300', active: true },
+  { id: 'bike-eletrica', label: 'Aluguel de bike elétrica', icon: Bike, color: 'text-lime-300', active: true },
+  { id: 'mercado-universitario', label: 'Novo mercado no universitário', icon: Store, color: 'text-lime-300', active: true },
+  { id: 'entrega-ovos', label: 'Entrega de ovos', icon: Egg, color: 'text-amber-300', active: true },
+  { id: 'materiais-construcao', label: 'Materiais de construção', icon: Hammer, color: 'text-stone-300', active: true },
 ]
 
 const categoryAliases: Record<string, string[]> = {
@@ -118,6 +136,15 @@ const categoryAliases: Record<string, string[]> = {
   'video-maker': ['video maker', 'videomaker', 'filmagem'],
   trufaia: ['trufaia', 'trufa'],
   'caldo-de-cana': ['caldo de cana', 'caldo cana'],
+  variedades: ['variedades', 'multi vendas'],
+  'social-midia': ['social midia', 'impulse', 'edicao de video'],
+  psicanalista: ['psicanalista', 'psicanalise'],
+  'cachorro-quente': ['cachorro-quente', 'cachorro quente', 'dogao', 'hot dog'],
+  mel: ['mel do', 'apicultura'],
+  'bike-eletrica': ['bike eletrica', 'bicicleta eletrica'],
+  'mercado-universitario': ['novo mercado no universitario'],
+  'entrega-ovos': ['entrega de ovos'],
+  'materiais-construcao': ['materiais de construcao'],
 }
 
 type PublicPartner = {
@@ -154,9 +181,9 @@ const fallbackPartners: PublicPartner[] = [
   { id: 'fp-10b', name: 'Thalynson — O Menino da Horta', category: 'Hortifruti', phone: '19 99954 5292', address: '', city: 'Engenheiro Coelho', region: 'UNASP', status: 'ATIVO', showOnMap: false, discount: '10%' },
   { id: 'fp-11', name: 'Brilha Odontologia', category: 'Consultório Odontológico', phone: '11 97530 2618', address: 'Rua Minas Gerais, 254, Jardim Amalia', city: 'Engenheiro Coelho', region: 'UNASP', status: 'ATIVO', showOnMap: true, discount: '10% à vista e 5% no crédito' },
   { id: 'fp-12', name: 'Autoescola José Lopes', category: 'CFC', phone: '19 99958 3241', address: 'Rua Antônio Raphaelli, 575, Pq. das Indústrias', city: 'Engenheiro Coelho', region: 'UNASP', status: 'ATIVO', showOnMap: true, discount: '5%' },
-  { id: 'fp-13', name: 'Farmácia', category: 'Farmácia', phone: '19 99714 2695', address: 'Rua Minas Gerais, 167, Jardim América', city: 'Engenheiro Coelho', region: 'UNASP', status: 'ATIVO', showOnMap: true, discount: 'De 5 a 15%' },
+  { id: 'fp-13', name: 'Drogaria Total Popular', category: 'Farmácia', phone: '19 99714 2695', address: 'Rua Minas Gerais, 167, Jardim América', city: 'Engenheiro Coelho', region: 'UNASP', status: 'ATIVO', showOnMap: true, discount: 'De 5 a 15%', note: 'Tele-entrega na região do UNASP, pedido mínimo de R$ 20,00.\nSegunda a quinta: 12:30 às 20:00 · Sexta: 12:30 às 17:00.' },
   { id: 'fp-14', name: 'Posto de combustível BR', category: 'Posto de combustível', phone: '19 97146 0709', address: 'Rua Amadeu Jorge Teresani, 230', city: 'Engenheiro Coelho', region: 'UNASP', status: 'ATIVO', showOnMap: true, discount: 'R$0,10/L' },
-  { id: 'fp-15', name: 'Salão beleza', category: 'Salão de beleza', phone: '19 99921 7647', address: 'Rua Lery de Souza Duarte, 349', city: 'Engenheiro Coelho', region: 'UNASP', status: 'ATIVO', showOnMap: true, discount: '5 a 10%' },
+  { id: 'fp-15', name: 'Salão de beleza', category: 'Salão de beleza', phone: '19 99921 7647', address: 'Rua Lery de Souza Duarte, 349', city: 'Engenheiro Coelho', region: 'UNASP', status: 'ATIVO', showOnMap: true, discount: '5 a 10%', note: 'Unhas e sobrancelhas.' },
   { id: 'fp-16', name: 'Moto táxi', category: 'Motorista', phone: '19 99968 0621', address: '', city: 'Engenheiro Coelho', region: 'UNASP', status: 'ATIVO', showOnMap: false, discount: '5%' },
   { id: 'fp-17', name: 'Motorista carro', category: 'Motorista', phone: '11 98224 5890', address: '', city: 'Engenheiro Coelho', region: 'UNASP', status: 'ATIVO', showOnMap: false, discount: '5%' },
   { id: 'fp-18', name: 'Sorveteria', category: 'Sorveteria', phone: '', address: 'Rua 7 de Setembro, 515', city: 'Engenheiro Coelho', region: 'UNASP', status: 'ATIVO', showOnMap: true },
@@ -171,6 +198,17 @@ const fallbackPartners: PublicPartner[] = [
   { id: 'fp-bonani', name: 'Adriano Bonani Fotografia', category: 'Fotografia', phone: '19 99702 0908', address: '', city: 'Engenheiro Coelho', region: 'UNASP', status: 'ATIVO', showOnMap: false, discount: '10%' },
   { id: 'fp-video-maker', name: 'Vídeo maker', category: 'Vídeo maker', phone: '19 99651 6358', address: '', city: 'Engenheiro Coelho', region: 'UNASP', status: 'ATIVO', showOnMap: false, discount: '10%', note: 'Cobertura de eventos, entrevistas, filmagens, vídeos institucionais e propaganda.' },
   { id: 'fp-trufaia', name: 'Trufaia', category: 'Trufas', phone: '19 98135 5054', address: '', city: 'Engenheiro Coelho', region: 'UNASP', status: 'ATIVO', showOnMap: false, discount: '13,33% no app (R$ 1,30 a trufa)' },
+  { id: 'fp-simone', name: 'Simone Variedades', category: 'Variedades', phone: '19 98307 4058', address: 'Rua Arlindo Ferreira de Camargo', city: 'Cidade Universitária', region: 'UNASP', status: 'ATIVO', showOnMap: false, discount: '5 a 10%' },
+  { id: 'fp-aej-impulse', name: 'A&J Impulse', category: 'Social mídia', phone: '19 99865 4794', address: '', city: 'Cidade Universitária', region: 'UNASP', status: 'ATIVO', showOnMap: false, discount: '15% em edição de vídeos' },
+  // ponytail: a arte so traz e-mail, sem telefone — o card sai sem botao de conversar.
+  { id: 'fp-psicanalista', name: 'Samuel Augusto — Psicanalista', category: 'Psicanalista', phone: '', address: 'Av. Ipê Roxo, 164, Lagoa Bonita', city: 'Engenheiro Coelho', region: 'UNASP', status: 'ATIVO', showOnMap: true, discount: '10%', note: 'Contato por e-mail: psicanalistasamuelaugusto@gmail.com' },
+  { id: 'fp-dogao', name: 'Dogão de Rua', category: 'Cachorro-quente', phone: '19 99803 1880', address: 'Rua Aparecido Bueno de Moraes, 966', city: 'Engenheiro Coelho', region: 'UNASP', status: 'ATIVO', showOnMap: true, discount: '5%' },
+  // ponytail: a arte do mel nao traz telefone, so o ponto (frente da Lagoa Bonita).
+  { id: 'fp-mel', name: 'Mel do Marcos', category: 'Mel', phone: '', address: 'Em frente à Lagoa Bonita', city: 'Engenheiro Coelho', region: 'UNASP', status: 'ATIVO', showOnMap: true, discount: '5%' },
+  { id: 'fp-bike', name: 'Aluguel de bike elétrica', category: 'Bike elétrica', phone: '62 99364 9805', address: '', city: 'Engenheiro Coelho', region: 'UNASP', status: 'ATIVO', showOnMap: false, discount: '10% com o app (diária R$ 40 em vez de R$ 50)' },
+  { id: 'fp-mercado-univ', name: 'Novo mercado no universitário', category: 'Novo mercado no universitário', phone: '', address: '', city: 'Engenheiro Coelho', region: 'UNASP', status: 'ATIVO', showOnMap: false, comingSoon: true },
+  { id: 'fp-ovos', name: 'Entrega de ovos', category: 'Entrega de ovos', phone: '', address: '', city: 'Engenheiro Coelho', region: 'UNASP', status: 'ATIVO', showOnMap: false, comingSoon: true },
+  { id: 'fp-construcao', name: 'Materiais de construção', category: 'Materiais de construção', phone: '', address: '', city: 'Engenheiro Coelho', region: 'UNASP', status: 'ATIVO', showOnMap: false, comingSoon: true },
   { id: 'fp-caldo-cana', name: 'Caldo de Cana do Marcos', category: 'Caldo de cana', phone: '19 98849 1797', address: '', city: 'Engenheiro Coelho', region: 'UNASP', status: 'ATIVO', showOnMap: false, discount: '5%' },
 ]
 
@@ -378,7 +416,7 @@ const offers: Offer[] = [
 // Quem recebe o comprovante do Pix. Os números viram link de WhatsApp na seção de cadastro.
 const MENSAGEM_COMPROVANTE = 'Olá! Acabei de fazer meu cadastro na EuPlus e estou enviando o comprovante do pagamento.'
 const contatosPagamento = [
-  { name: 'Obe Daniel', phone: '19 98135-5054' },
+  { name: 'Obe Daniel', phone: '62 99364-9805' },
   { name: 'Clarisse', phone: '19 98224-6821' },
 ]
 
@@ -463,12 +501,22 @@ const toRegionId = (regionValue: string) => {
   return ''
 }
 
+// Vence o alias mais LONGO, nao o primeiro da lista. Com `find` puro, a ordem do
+// array decidia: "materiais de construcao" caía em construtora (alias 'construcao'),
+// "bike eletrica" em eletricista ('eletrica') e "novo mercado no universitario" em
+// mercado. Categoria nova generica passaria a roubar parceiro alheio de novo.
 const getPartnerCategoryId = (partner: PublicPartner) => {
   const haystack = normalizeLabel(`${partner.category} ${partner.name}`)
-  const match = partnerCategories.find((category) =>
-    categoryAliases[category.id].some((alias) => haystack.includes(alias)),
-  )
-  return match?.id ?? null
+  let melhor: { id: string; tamanho: number } | null = null
+
+  for (const category of partnerCategories) {
+    for (const alias of categoryAliases[category.id]) {
+      if (!haystack.includes(alias)) continue
+      if (!melhor || alias.length > melhor.tamanho) melhor = { id: category.id, tamanho: alias.length }
+    }
+  }
+
+  return melhor?.id ?? null
 }
 
 const getWhatsAppLink = (phone: string, message = 'Olá, vim pela EuPlus') => {
